@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { BrandSection } from "@/components/BrandSection";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductDetailModal } from "@/components/ProductDetailModal";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const clothingBrands = [
   {
@@ -43,59 +45,195 @@ const clothingBrands = [
   }
 ];
 
-const sampleProducts = [
+const allProducts = [
+  // Zara Products
   {
-    id: "1",
+    id: "zara-1",
     name: "Premium Cotton T-Shirt",
     price: 1299,
     image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
     brand: "Zara",
     rating: 4.5,
     inStock: true,
     stockCount: 12,
-    category: "clothing" as const
+    category: "clothing" as const,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Black", "White", "Navy"],
+    fitStyle: "Regular Fit",
+    description: "Soft cotton t-shirt with a comfortable regular fit. Perfect for casual wear.",
+    material: "100% Cotton"
   },
   {
-    id: "2", 
+    id: "zara-2",
+    name: "Textured Knit Sweater",
+    price: 2899,
+    image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    brand: "Zara",
+    rating: 4.3,
+    inStock: true,
+    stockCount: 5,
+    category: "clothing" as const,
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Beige", "Grey", "Burgundy"],
+    fitStyle: "Oversized Fit",
+    description: "Cozy textured knit sweater with an oversized fit for maximum comfort.",
+    material: "60% Cotton, 40% Acrylic"
+  },
+  {
+    id: "zara-3",
+    name: "High Waist Wide Leg Jeans",
+    price: 3299,
+    image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    brand: "Zara",
+    rating: 4.6,
+    inStock: true,
+    stockCount: 8,
+    category: "clothing" as const,
+    sizes: ["26", "28", "30", "32", "34"],
+    colors: ["Light Blue", "Dark Blue", "Black"],
+    fitStyle: "High Waist Wide Leg",
+    description: "Trendy high waist jeans with a wide leg cut for a modern silhouette.",
+    material: "98% Cotton, 2% Elastane"
+  },
+  
+  // H&M Products
+  {
+    id: "hm-1",
     name: "Slim Fit Denim Jeans",
     price: 2499,
     image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
     brand: "H&M",
     rating: 4.2,
     inStock: true,
     stockCount: 8,
-    category: "clothing" as const
+    category: "clothing" as const,
+    sizes: ["28", "30", "32", "34", "36"],
+    colors: ["Dark Blue", "Light Blue", "Black"],
+    fitStyle: "Slim Fit",
+    description: "Classic slim fit jeans perfect for everyday wear.",
+    material: "99% Cotton, 1% Elastane"
   },
   {
-    id: "3",
-    name: "Classic White Sneakers", 
+    id: "hm-2",
+    name: "Ribbed Tank Top",
+    price: 799,
+    image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    brand: "H&M",
+    rating: 4.4,
+    inStock: true,
+    stockCount: 15,
+    category: "clothing" as const,
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["White", "Black", "Pink", "Blue"],
+    fitStyle: "Fitted",
+    description: "Soft ribbed tank top with a fitted silhouette.",
+    material: "95% Cotton, 5% Elastane"
+  },
+  {
+    id: "hm-3",
+    name: "Oversized Blazer",
+    price: 4999,
+    image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    brand: "H&M",
+    rating: 4.1,
+    inStock: true,
+    stockCount: 3,
+    category: "clothing" as const,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Black", "Navy", "Beige"],
+    fitStyle: "Oversized",
+    description: "Stylish oversized blazer perfect for professional or casual wear.",
+    material: "68% Polyester, 30% Viscose, 2% Elastane"
+  },
+  
+  // Adidas Products
+  {
+    id: "adidas-1",
+    name: "Classic White Sneakers",
     price: 3999,
     image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
     brand: "Adidas",
     rating: 4.7,
     inStock: false,
-    category: "clothing" as const
+    category: "clothing" as const,
+    sizes: ["6", "7", "8", "9", "10", "11"],
+    colors: ["White", "Black", "Grey"],
+    fitStyle: "Regular",
+    description: "Classic white sneakers with superior comfort and style.",
+    material: "Leather Upper, Rubber Sole"
+  },
+  {
+    id: "adidas-2",
+    name: "3-Stripes Track Pants",
+    price: 2799,
+    image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    brand: "Adidas",
+    rating: 4.5,
+    inStock: true,
+    stockCount: 10,
+    category: "clothing" as const,
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Black", "Navy", "Grey"],
+    fitStyle: "Regular Fit",
+    description: "Comfortable track pants with iconic 3-stripes design.",
+    material: "100% Polyester"
+  },
+  {
+    id: "adidas-3",
+    name: "Performance Sports Bra",
+    price: 1899,
+    image: "/api/placeholder/300/300",
+    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    brand: "Adidas",
+    rating: 4.6,
+    inStock: true,
+    stockCount: 7,
+    category: "clothing" as const,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Black", "Pink", "Blue"],
+    fitStyle: "Compression Fit",
+    description: "High-performance sports bra with moisture-wicking technology.",
+    material: "78% Recycled Polyester, 22% Elastane"
   }
 ];
 
 export default function Clothing() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [products, setProducts] = useState(sampleProducts);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   const handleBrandSelect = (brandId: string) => {
     setSelectedBrand(brandId);
-    // In a real app, this would filter products by brand
   };
 
-  const handleAddToCart = (productId: string) => {
-    console.log("Added to cart:", productId);
-    // In a real app, this would add to cart
+  const filteredProducts = selectedBrand 
+    ? allProducts.filter(product => product.brand.toLowerCase() === selectedBrand.toLowerCase())
+    : allProducts;
+
+  const handleAddToCart = (productId: string, size?: string, color?: string) => {
+    const product = allProducts.find(p => p.id === productId);
+    const details = size && color ? ` (Size: ${size}, Color: ${color})` : '';
+    toast.success(`${product?.name}${details} added to cart!`);
+    setSelectedProduct(null);
   };
 
-  const handleReserveForTrial = (productId: string) => {
-    console.log("Reserved for trial:", productId);
-    // In a real app, this would reserve for trial
+  const handleReserveForTrial = (productId: string, size?: string, color?: string) => {
+    const product = allProducts.find(p => p.id === productId);
+    const details = size && color ? ` (Size: ${size}, Color: ${color})` : '';
+    toast.success(`${product?.name}${details} reserved for trial!`);
+    setSelectedProduct(null);
   };
+
+  const selectedProductData = selectedProduct 
+    ? allProducts.find(p => p.id === selectedProduct) 
+    : null;
 
   if (selectedBrand) {
     const brand = clothingBrands.find(b => b.id === selectedBrand);
@@ -116,12 +254,13 @@ export default function Clothing() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 {...product}
                 onAddToCart={handleAddToCart}
                 onReserveForTrial={handleReserveForTrial}
+                onViewDetails={() => setSelectedProduct(product.id)}
               />
             ))}
           </div>
@@ -131,14 +270,24 @@ export default function Clothing() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-surface">
-      <div className="container mx-auto px-6 py-8">
-        <BrandSection
-          title="Clothing Stores"
-          brands={clothingBrands}
-          onBrandSelect={handleBrandSelect}
-        />
+    <>
+      <div className="min-h-screen bg-gradient-surface">
+        <div className="container mx-auto px-6 py-8">
+          <BrandSection
+            title="Clothing Stores"
+            brands={clothingBrands}
+            onBrandSelect={handleBrandSelect}
+          />
+        </div>
       </div>
-    </div>
+      
+      <ProductDetailModal
+        product={selectedProductData}
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onAddToCart={handleAddToCart}
+        onReserveForTrial={handleReserveForTrial}
+      />
+    </>
   );
 }

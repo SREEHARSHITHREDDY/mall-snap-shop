@@ -16,6 +16,7 @@ interface ProductCardProps {
   category: "clothing" | "food" | "other";
   onAddToCart: (id: string) => void;
   onReserveForTrial?: (id: string) => void;
+  onViewDetails?: () => void;
 }
 
 export function ProductCard({ 
@@ -29,7 +30,8 @@ export function ProductCard({
   stockCount,
   category,
   onAddToCart,
-  onReserveForTrial 
+  onReserveForTrial,
+  onViewDetails 
 }: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -73,12 +75,27 @@ export function ProductCard({
       </CardHeader>
 
       <CardContent className="p-4">
-        <h3 className="font-semibold text-foreground mb-1 line-clamp-2">{name}</h3>
+        <h3 
+          className="font-semibold text-foreground mb-1 line-clamp-2 cursor-pointer hover:text-shopping-primary transition-colors" 
+          onClick={onViewDetails}
+        >
+          {name}
+        </h3>
         <div className="flex items-center gap-1 mb-2">
           <StarIcon className="w-4 h-4 fill-yellow-400 text-yellow-400" />
           <span className="text-sm text-muted-foreground">{rating}</span>
         </div>
         <p className="text-lg font-bold text-shopping-primary">₹{price}</p>
+        {onViewDetails && (
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-0 h-auto text-xs text-shopping-primary hover:text-shopping-primary/80 mt-1"
+            onClick={onViewDetails}
+          >
+            View Details →
+          </Button>
+        )}
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex flex-col gap-2">
