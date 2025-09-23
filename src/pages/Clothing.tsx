@@ -220,14 +220,16 @@ export default function Clothing() {
   const handleAddToCart = (productId: string, size?: string, color?: string) => {
     const product = allProducts.find(p => p.id === productId);
     const details = size && color ? ` (Size: ${size}, Color: ${color})` : '';
-    toast.success(`${product?.name}${details} added to cart!`);
+    // In a real app, this would add to cart with type: "purchase"
+    toast.success(`${product?.name}${details} added to cart for purchase!`);
     setSelectedProduct(null);
   };
 
   const handleReserveForTrial = (productId: string, size?: string, color?: string) => {
     const product = allProducts.find(p => p.id === productId);
     const details = size && color ? ` (Size: ${size}, Color: ${color})` : '';
-    toast.success(`${product?.name}${details} reserved for trial!`);
+    // In a real app, this would add to cart with type: "trial"
+    toast.success(`${product?.name}${details} reserved for trial (2 hours)!`);
     setSelectedProduct(null);
   };
 

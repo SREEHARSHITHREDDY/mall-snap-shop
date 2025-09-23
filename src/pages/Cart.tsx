@@ -13,6 +13,9 @@ interface CartItem {
   image: string;
   brand: string;
   category: "clothing" | "food" | "other";
+  type: "purchase" | "trial"; // Add type to distinguish between purchase and trial items
+  size?: string;
+  color?: string;
 }
 
 const sampleCartItems: CartItem[] = [
@@ -20,19 +23,35 @@ const sampleCartItems: CartItem[] = [
     id: "1",
     name: "Premium Cotton T-Shirt",
     price: 1299,
-    quantity: 2,
+    quantity: 1,
     image: "/api/placeholder/100/100",
     brand: "Zara",
-    category: "clothing"
+    category: "clothing",
+    type: "purchase",
+    size: "M",
+    color: "Black"
   },
   {
     id: "2",
+    name: "Textured Knit Sweater",
+    price: 2899,
+    quantity: 1,
+    image: "/api/placeholder/100/100",
+    brand: "Zara",
+    category: "clothing",
+    type: "trial",
+    size: "L",
+    color: "Grey"
+  },
+  {
+    id: "3",
     name: "Big Mac Combo",
     price: 299,
     quantity: 1,
     image: "/api/placeholder/100/100",
     brand: "McDonald's",
-    category: "food"
+    category: "food",
+    type: "purchase"
   }
 ];
 
@@ -59,7 +78,8 @@ export default function Cart() {
   const tax = subtotal * 0.18; // 18% GST
   const total = subtotal + tax;
 
-  const clothingItems = cartItems.filter(item => item.category === "clothing");
+  const clothingPurchaseItems = cartItems.filter(item => item.category === "clothing" && item.type === "purchase");
+  const clothingTrialItems = cartItems.filter(item => item.category === "clothing" && item.type === "trial");
   const foodItems = cartItems.filter(item => item.category === "food");
   const otherItems = cartItems.filter(item => item.category === "other");
 
@@ -93,22 +113,25 @@ export default function Cart() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Clothing Items */}
-            {clothingItems.length > 0 && (
+            {/* Clothing Purchase Items */}
+            {clothingPurchaseItems.length > 0 && (
               <Card className="bg-gradient-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <ShoppingCartIcon className="w-5 h-5" />
-                    Clothing Items
+                    Clothing Items - Purchase
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {clothingItems.map((item) => (
+                  {clothingPurchaseItems.map((item) => (
                     <div key={item.id} className="flex items-center gap-4 p-4 border border-border rounded-lg">
                       <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
                       <div className="flex-1">
                         <h3 className="font-semibold">{item.name}</h3>
                         <p className="text-sm text-muted-foreground">{item.brand}</p>
+                        {item.size && item.color && (
+                          <p className="text-xs text-muted-foreground">Size: {item.size}, Color: {item.color}</p>
+                        )}
                         <p className="font-bold text-shopping-primary">₹{item.price}</p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -140,19 +163,76 @@ export default function Cart() {
                   ))}
                   <div className="flex gap-3 pt-4">
                     <Button 
-                      variant="outline" 
-                      className="flex-1"
-                      onClick={() => handleClothingCheckout("trial")}
-                    >
-                      <ClockIcon className="w-4 h-4 mr-2" />
-                      Reserve for Trial
-                    </Button>
-                    <Button 
-                      className="flex-1 bg-gradient-primary"
+                      className="w-full bg-gradient-primary"
                       onClick={() => handleClothingCheckout("purchase")}
                     >
                       <CreditCardIcon className="w-4 h-4 mr-2" />
                       Proceed to Payment
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Clothing Trial Items */}
+            {clothingTrialItems.length > 0 && (
+              <Card className="bg-gradient-card border-orange-200">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ClockIcon className="w-5 h-5 text-orange-500" />
+                    Clothing Items - Reserved for Trial
+                    <Badge variant="secondary" className="bg-orange-100 text-orange-700">Trial</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {clothingTrialItems.map((item) => (
+                    <div key={item.id} className="flex items-center gap-4 p-4 border border-border rounded-lg bg-orange-50">
+                      <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
+                      <div className="flex-1">
+                        <h3 className="font-semibold">{item.name}</h3>
+                        <p className="text-sm text-muted-foreground">{item.brand}</p>
+                        {item.size && item.color && (
+                          <p className="text-xs text-muted-foreground">Size: {item.size}, Color: {item.color}</p>
+                        )}
+                        <p className="font-bold text-shopping-primary">₹{item.price}</p>
+                        <Badge variant="secondary" className="bg-orange-200 text-orange-800 mt-1">
+                          Trial Period: 2 hours
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        >
+                          <MinusIcon className="w-4 h-4" />
+                        </Button>
+                        <span className="w-8 text-center">{item.quantity}</span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        >
+                          <PlusIcon className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeItem(item.id)}
+                        className="text-destructive"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <div className="flex gap-3 pt-4">
+                    <Button 
+                      className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+                      onClick={() => handleClothingCheckout("trial")}
+                    >
+                      <ClockIcon className="w-4 h-4 mr-2" />
+                      Confirm Trial Reservation
                     </Button>
                   </div>
                 </CardContent>

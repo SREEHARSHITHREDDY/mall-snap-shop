@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeftIcon, ClockIcon, MapPinIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const foodBrands = [
   {
@@ -220,7 +221,8 @@ export default function Food() {
     : allFoodItems;
 
   const handleAddToCart = (productId: string) => {
-    console.log("Added food item to cart:", productId);
+    const product = allFoodItems.find(p => p.id === productId);
+    toast.success(`${product?.name} added to food order!`);
   };
 
   if (selectedBrand) {

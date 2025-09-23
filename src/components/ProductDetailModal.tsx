@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { StarIcon, HeartIcon, ShoppingCartIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { PaymentModal } from "./PaymentModal";
 
 interface ProductDetailModalProps {
   product: {
@@ -39,12 +40,13 @@ export function ProductDetailModal({
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
 
   if (!product) return null;
 
   const handleAddToCart = () => {
     if (selectedSize && selectedColor) {
-      onAddToCart(product.id, selectedSize, selectedColor);
+      setShowPayment(true);
     }
   };
 
@@ -220,6 +222,18 @@ export function ProductDetailModal({
           </div>
         </div>
       </DialogContent>
+      
+      <PaymentModal
+        isOpen={showPayment}
+        onClose={() => setShowPayment(false)}
+        product={selectedSize && selectedColor ? {
+          name: product.name,
+          price: product.price,
+          brand: product.brand,
+          size: selectedSize,
+          color: selectedColor
+        } : null}
+      />
     </Dialog>
   );
 }
