@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeftIcon, ClockIcon, MapPinIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useCart } from "@/context/CartContext";
 
 const foodBrands = [
   {
@@ -211,6 +212,7 @@ const allFoodItems = [
 
 export default function Food() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const { addToCart } = useCart();
 
   const handleBrandSelect = (brandId: string) => {
     setSelectedBrand(brandId);
@@ -222,7 +224,18 @@ export default function Food() {
 
   const handleAddToCart = (productId: string) => {
     const product = allFoodItems.find(p => p.id === productId);
-    toast.success(`${product?.name} added to food order!`);
+    if (product) {
+      addToCart({
+        id: `${productId}-${Date.now()}`,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        brand: product.brand,
+        category: product.category,
+        type: "purchase"
+      });
+      toast.success(`${product.name} added to food order!`);
+    }
   };
 
   if (selectedBrand) {

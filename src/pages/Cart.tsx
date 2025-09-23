@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { TrashIcon, MinusIcon, PlusIcon, ShoppingCartIcon, ClockIcon, CreditCardIcon, UtensilsIcon } from "lucide-react";
+import { toast } from "sonner";
+import { PaymentModal } from "@/components/PaymentModal";
+import { useCart } from "@/context/CartContext";
 
 interface CartItem {
   id: string;
@@ -56,22 +59,16 @@ const sampleCartItems: CartItem[] = [
 ];
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(sampleCartItems);
+  const { cartItems, updateQuantity: updateCartQuantity, removeFromCart } = useCart();
+  const [showPayment, setShowPayment] = useState(false);
+  const [paymentProduct, setPaymentProduct] = useState<any>(null);
 
   const updateQuantity = (id: string, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      setCartItems(items => items.filter(item => item.id !== id));
-    } else {
-      setCartItems(items => 
-        items.map(item => 
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    }
+    updateCartQuantity(id, newQuantity);
   };
 
   const removeItem = (id: string) => {
-    setCartItems(items => items.filter(item => item.id !== id));
+    removeFromCart(id);
   };
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -84,13 +81,38 @@ export default function Cart() {
   const otherItems = cartItems.filter(item => item.category === "other");
 
   const handleClothingCheckout = (action: "trial" | "purchase") => {
-    console.log(`Clothing checkout: ${action}`);
-    // Handle clothing checkout logic
+    const clothingItems = action === "purchase" ? clothingPurchaseItems : clothingTrialItems;
+    const totalAmount = clothingItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tax = totalAmount * 0.18;
+    const total = totalAmount + tax;
+
+    if (action === "purchase") {
+      setPaymentProduct({
+        name: `${clothingItems.length} Clothing Items`,
+        price: total,
+        brand: "Various Brands"
+      });
+      setShowPayment(true);
+    } else {
+      toast.success("Trial reservation confirmed! Visit store within 2 hours.");
+    }
   };
 
   const handleFoodCheckout = (action: "order" | "schedule") => {
-    console.log(`Food checkout: ${action}`);
-    // Handle food checkout logic
+    const totalAmount = foodItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tax = totalAmount * 0.18;
+    const total = totalAmount + tax;
+
+    if (action === "order") {
+      setPaymentProduct({
+        name: `${foodItems.length} Food Items`,
+        price: total,
+        brand: "Food Court"
+      });
+      setShowPayment(true);
+    } else {
+      toast.success("Schedule time picker opened - Feature coming soon!");
+    }
   };
 
   if (cartItems.length === 0) {
@@ -331,6 +353,15 @@ export default function Cart() {
           </div>
         </div>
       </div>
+      
+      <PaymentModal
+        isOpen={showPayment}
+        onClose={() => {
+          setShowPayment(false);
+          setPaymentProduct(null);
+        }}
+        product={paymentProduct}
+      />
     </div>
   );
 }

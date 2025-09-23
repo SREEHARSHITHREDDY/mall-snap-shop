@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { NotificationModal } from "./NotificationModal";
 import { ProfileModal } from "./ProfileModal";
+import { useCart } from "@/context/CartContext";
 
 export function Header() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const { cartCount } = useCart();
 
   const handleCartClick = () => {
     navigate('/cart');
@@ -56,9 +58,11 @@ export function Header() {
               onClick={handleCartClick}
             >
               <ShoppingCartIcon className="w-5 h-5" />
-              <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-xs bg-shopping-primary">
-                2
-              </Badge>
+              {cartCount > 0 && (
+                <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-xs bg-shopping-primary">
+                  {cartCount}
+                </Badge>
+              )}
             </Button>
 
             <Button 

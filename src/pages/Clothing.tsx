@@ -5,6 +5,7 @@ import { ProductDetailModal } from "@/components/ProductDetailModal";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useCart } from "@/context/CartContext";
 
 const clothingBrands = [
   {
@@ -208,6 +209,7 @@ const allProducts = [
 export default function Clothing() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const { addToCart } = useCart();
 
   const handleBrandSelect = (brandId: string) => {
     setSelectedBrand(brandId);
@@ -219,17 +221,39 @@ export default function Clothing() {
 
   const handleAddToCart = (productId: string, size?: string, color?: string) => {
     const product = allProducts.find(p => p.id === productId);
-    const details = size && color ? ` (Size: ${size}, Color: ${color})` : '';
-    // In a real app, this would add to cart with type: "purchase"
-    toast.success(`${product?.name}${details} added to cart for purchase!`);
+    if (product) {
+      addToCart({
+        id: `${productId}-${Date.now()}`, // Unique ID for cart item
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        brand: product.brand,
+        category: product.category,
+        type: "purchase",
+        size,
+        color
+      });
+      toast.success(`${product.name} added to cart for purchase!`);
+    }
     setSelectedProduct(null);
   };
 
   const handleReserveForTrial = (productId: string, size?: string, color?: string) => {
     const product = allProducts.find(p => p.id === productId);
-    const details = size && color ? ` (Size: ${size}, Color: ${color})` : '';
-    // In a real app, this would add to cart with type: "trial"
-    toast.success(`${product?.name}${details} reserved for trial (2 hours)!`);
+    if (product) {
+      addToCart({
+        id: `${productId}-trial-${Date.now()}`, // Unique ID for trial item
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        brand: product.brand,
+        category: product.category,
+        type: "trial",
+        size,
+        color
+      });
+      toast.success(`${product.name} reserved for trial (2 hours)!`);
+    }
     setSelectedProduct(null);
   };
 
