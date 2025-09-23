@@ -13,11 +13,13 @@ export function Header() {
   };
 
   const handleNotificationsClick = () => {
-    toast.info("Notifications feature coming soon!");
+    // TODO: Implement notifications functionality
+    console.log("Notifications clicked");
   };
 
   const handleProfileClick = () => {
-    toast.info("Profile feature coming soon!");
+    // TODO: Implement profile functionality  
+    console.log("Profile clicked");
   };
 
   return (

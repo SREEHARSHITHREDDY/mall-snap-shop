@@ -45,9 +45,10 @@ const foodBrands = [
   }
 ];
 
-const sampleFoodItems = [
+const allFoodItems = [
+  // McDonald's Products
   {
-    id: "f1",
+    id: "mcdonalds-1",
     name: "Big Mac Combo",
     price: 299,
     image: "/api/placeholder/300/300",
@@ -55,39 +56,168 @@ const sampleFoodItems = [
     rating: 4.3,
     inStock: true,
     stockCount: 25,
-    category: "food" as const
+    category: "food" as const,
+    prepTime: "15-20 mins",
+    description: "Two all-beef patties, special sauce, lettuce, cheese, pickles, onions on a sesame seed bun with fries and drink"
   },
   {
-    id: "f2",
+    id: "mcdonalds-2", 
+    name: "McChicken Deluxe",
+    price: 189,
+    image: "/api/placeholder/300/300",
+    brand: "McDonald's",
+    rating: 4.1,
+    inStock: true,
+    stockCount: 30,
+    category: "food" as const,
+    prepTime: "10-15 mins",
+    description: "Crispy chicken fillet with lettuce and mayo in a sesame seed bun"
+  },
+  {
+    id: "mcdonalds-3",
+    name: "French Fries Large",
+    price: 89,
+    image: "/api/placeholder/300/300",
+    brand: "McDonald's",
+    rating: 4.4,
+    inStock: true,
+    stockCount: 40,
+    category: "food" as const,
+    prepTime: "5-10 mins",
+    description: "Golden, crispy and delicious french fries"
+  },
+  {
+    id: "mcdonalds-4",
+    name: "McFlurry Oreo",
+    price: 99,
+    image: "/api/placeholder/300/300",
+    brand: "McDonald's",
+    rating: 4.5,
+    inStock: true,
+    stockCount: 20,
+    category: "food" as const,
+    prepTime: "5 mins",
+    description: "Vanilla soft serve with crushed Oreo cookies"
+  },
+
+  // KFC Products
+  {
+    id: "kfc-1",
     name: "Zinger Burger Meal",
     price: 349,
-    image: "/api/placeholder/300/300", 
+    image: "/api/placeholder/300/300",
     brand: "KFC",
     rating: 4.5,
     inStock: true,
     stockCount: 18,
-    category: "food" as const
+    category: "food" as const,
+    prepTime: "15-20 mins",
+    description: "Spicy zinger fillet with lettuce and mayo, served with fries and drink"
   },
   {
-    id: "f3",
+    id: "kfc-2",
+    name: "Hot & Crispy Chicken",
+    price: 199,
+    image: "/api/placeholder/300/300",
+    brand: "KFC",
+    rating: 4.3,
+    inStock: true,
+    stockCount: 15,
+    category: "food" as const,
+    prepTime: "20-25 mins",
+    description: "1 piece of KFC's signature hot and crispy chicken"
+  },
+  {
+    id: "kfc-3",
+    name: "Popcorn Chicken Large",
+    price: 149,
+    image: "/api/placeholder/300/300",
+    brand: "KFC",
+    rating: 4.2,
+    inStock: true,
+    stockCount: 22,
+    category: "food" as const,
+    prepTime: "10-15 mins",
+    description: "Bite-sized pieces of tender chicken with KFC's secret recipe"
+  },
+  {
+    id: "kfc-4",
+    name: "Krushems Chocolate",
+    price: 129,
+    image: "/api/placeholder/300/300",
+    brand: "KFC",
+    rating: 4.4,
+    inStock: false,
+    category: "food" as const,
+    prepTime: "5 mins",
+    description: "Thick chocolate shake with whipped cream"
+  },
+
+  // Starbucks Products  
+  {
+    id: "starbucks-1",
     name: "Caramel Macchiato",
     price: 195,
     image: "/api/placeholder/300/300",
-    brand: "Starbucks", 
+    brand: "Starbucks",
     rating: 4.6,
     inStock: true,
     stockCount: 32,
-    category: "food" as const
+    category: "food" as const,
+    prepTime: "5-8 mins",
+    description: "Steamed milk with vanilla syrup, marked with espresso and finished with caramel drizzle"
+  },
+  {
+    id: "starbucks-2",
+    name: "Cappuccino Venti",
+    price: 175,
+    image: "/api/placeholder/300/300",
+    brand: "Starbucks",
+    rating: 4.4,
+    inStock: true,
+    stockCount: 28,
+    category: "food" as const,
+    prepTime: "5-8 mins",
+    description: "Rich espresso with steamed milk foam"
+  },
+  {
+    id: "starbucks-3",
+    name: "Chicken Sandwich",
+    price: 285,
+    image: "/api/placeholder/300/300",
+    brand: "Starbucks",
+    rating: 4.1,
+    inStock: true,
+    stockCount: 12,
+    category: "food" as const,
+    prepTime: "10-12 mins",
+    description: "Grilled chicken breast with fresh vegetables in artisan bread"
+  },
+  {
+    id: "starbucks-4",
+    name: "Blueberry Muffin",
+    price: 125,
+    image: "/api/placeholder/300/300",
+    brand: "Starbucks",
+    rating: 4.3,
+    inStock: true,
+    stockCount: 8,
+    category: "food" as const,
+    prepTime: "2 mins",
+    description: "Freshly baked muffin with real blueberries"
   }
 ];
 
 export default function Food() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [foodItems, setFoodItems] = useState(sampleFoodItems);
 
   const handleBrandSelect = (brandId: string) => {
     setSelectedBrand(brandId);
   };
+
+  const filteredFoodItems = selectedBrand 
+    ? allFoodItems.filter(item => item.brand.toLowerCase() === selectedBrand.toLowerCase())
+    : allFoodItems;
 
   const handleAddToCart = (productId: string) => {
     console.log("Added food item to cart:", productId);
@@ -136,7 +266,7 @@ export default function Food() {
           </Card>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {foodItems.map((item) => (
+            {filteredFoodItems.map((item) => (
               <ProductCard
                 key={item.id}
                 {...item}
