@@ -7,10 +7,11 @@ import {
   UtensilsIcon, 
   ShoppingBagIcon, 
   ClockIcon, 
-  QrCodeIcon,
+  SearchIcon,
   TrendingUpIcon,
   MapPinIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  HeartIcon
 } from "lucide-react";
 import heroImage from "@/assets/hero-shopping-mall.jpg";
 
@@ -23,28 +24,22 @@ const quickStats = [
 
 const features = [
   {
-    title: "Browse & Reserve",
-    description: "Check stock availability and reserve items for trial before purchase",
+    title: "Try Before Buy",
+    description: "Reserve items for trial and only pay after you're satisfied",
     icon: ShirtIcon,
     link: "/clothing"
   },
   {
-    title: "Order Ahead",
-    description: "Skip the queue! Order food in advance and collect when ready",  
+    title: "Skip the Queue",
+    description: "Order food ahead and collect instantly when ready",  
     icon: UtensilsIcon,
     link: "/food"
   },
   {
-    title: "QR Collection",
-    description: "Get QR codes for seamless pickup and collection of your orders",
-    icon: QrCodeIcon,
-    link: "/qr-codes"
-  },
-  {
-    title: "Live Updates",
-    description: "Real-time stock updates and order status tracking",
-    icon: ShieldCheckIcon,
-    link: "/orders"
+    title: "Smart Search",
+    description: "Find exactly what you need across all stores instantly",
+    icon: SearchIcon,
+    link: "/clothing"
   }
 ];
 
@@ -123,35 +118,38 @@ const Index = () => {
       {/* Features Section */}
       <section className="py-20">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Why Choose Shopping Matrix?
+          <div className="text-center mb-20">
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
+              Shopping Made Simple
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Experience the future of mall shopping with our innovative platform
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+              Three simple steps to transform your mall experience
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
             {features.map((feature, index) => (
-              <Card 
-                key={index} 
-                className="group cursor-pointer transition-smooth hover:shadow-elevated hover:-translate-y-2 bg-gradient-card"
-              >
-                <Link to={feature.link}>
-                  <CardHeader className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-gradient-primary rounded-2xl flex items-center justify-center group-hover:scale-110 transition-smooth">
-                      <feature.icon className="w-8 h-8 text-primary-foreground" />
+              <Link key={index} to={feature.link} className="group">
+                <div className="text-center space-y-6">
+                  <div className="relative">
+                    <div className="w-20 h-20 mx-auto bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-smooth shadow-lg">
+                      <feature.icon className="w-10 h-10 text-primary-foreground" />
                     </div>
-                    <CardTitle className="text-xl mb-2">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-center">
-                    <p className="text-muted-foreground leading-relaxed">
+                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-shopping-secondary rounded-full flex items-center justify-center text-sm font-bold text-white">
+                      {index + 1}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <h3 className="text-2xl font-bold text-foreground group-hover:text-shopping-primary transition-colors">
+                      {feature.title}
+                    </h3>
+                    <p className="text-muted-foreground text-lg leading-relaxed">
                       {feature.description}
                     </p>
-                  </CardContent>
-                </Link>
-              </Card>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
