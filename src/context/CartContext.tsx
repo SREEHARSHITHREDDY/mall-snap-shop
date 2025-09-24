@@ -25,42 +25,7 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: "1",
-      name: "Premium Cotton T-Shirt",
-      price: 1299,
-      quantity: 1,
-      image: "/api/placeholder/100/100",
-      brand: "Zara",
-      category: "clothing",
-      type: "purchase",
-      size: "M",
-      color: "Black"
-    },
-    {
-      id: "2",
-      name: "Textured Knit Sweater",
-      price: 2899,
-      quantity: 1,
-      image: "/api/placeholder/100/100",
-      brand: "Zara",
-      category: "clothing",
-      type: "trial",
-      size: "L",
-      color: "Grey"
-    },
-    {
-      id: "3",
-      name: "Big Mac Combo",
-      price: 299,
-      quantity: 1,
-      image: "/api/placeholder/100/100",
-      brand: "McDonald's",
-      category: "food",
-      type: "purchase"
-    }
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const addToCart = (item: Omit<CartItem, 'quantity'>) => {
     const existingItem = cartItems.find(cartItem => 
