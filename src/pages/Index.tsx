@@ -228,7 +228,7 @@ const Index = () => {
               <Button 
                 asChild 
                 size="lg" 
-                className="glass glass-hover border-white/30 text-white hover:bg-white/20 text-lg px-10 py-4 magnetic"
+                className="glass glass-hover border-white/30 text-white hover:bg-white/20 text-lg px-10 py-4 magnetic backdrop-blur-md font-semibold"
               >
                 <Link to="/clothing">Browse Clothing</Link>
               </Button>
@@ -237,7 +237,7 @@ const Index = () => {
                 asChild 
                 size="lg"
                 variant="outline" 
-                className="glass glass-hover border-white/30 text-white hover:bg-white/10 text-lg px-10 py-4 magnetic"
+                className="glass glass-hover border-white/30 text-white hover:bg-white/10 text-lg px-10 py-4 magnetic backdrop-blur-md font-semibold"
               >
                 <Link to="/orders">View My Orders</Link>
               </Button>
