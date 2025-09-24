@@ -1,48 +1,18 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { BellIcon, ShoppingCartIcon, ClockIcon, CheckCircleIcon } from "lucide-react";
+import { useNotifications } from "@/context/NotificationContext";
 
 interface NotificationModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const initialNotifications = [
-  {
-    id: "1",
-    type: "order",
-    title: "Order Ready for Pickup",
-    message: "Your Zara order #ZR001 is ready for pickup at store counter",
-    time: "2 minutes ago",
-    isRead: false
-  },
-  {
-    id: "2", 
-    type: "promotion",
-    title: "Special Offer",
-    message: "Get 20% off on all H&M items this weekend only!",
-    time: "1 hour ago",
-    isRead: false
-  },
-  {
-    id: "3",
-    type: "reservation",
-    title: "Trial Reminder",
-    message: "Your trial reservation at Adidas expires in 30 minutes",
-    time: "2 hours ago",
-    isRead: true
-  }
-];
-
 export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
-  const [notifications, setNotifications] = useState(initialNotifications);
-
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(notif => ({ ...notif, isRead: true })));
-  };
+  const { notifications, markAllAsRead } = useNotifications();
   const getIcon = (type: string) => {
     switch (type) {
       case "order":
@@ -64,6 +34,9 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
             <BellIcon className="w-5 h-5" />
             Notifications
           </DialogTitle>
+          <DialogDescription>
+            Stay updated with your shopping activity and offers
+          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4 max-h-96 overflow-y-auto">

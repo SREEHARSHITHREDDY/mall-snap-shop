@@ -7,12 +7,14 @@ import { useState } from "react";
 import { NotificationModal } from "./NotificationModal";
 import { ProfileModal } from "./ProfileModal";
 import { useCart } from "@/context/CartContext";
+import { useNotifications } from "@/context/NotificationContext";
 
 export function Header() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { cartCount } = useCart();
+  const { unreadCount } = useNotifications();
 
   const handleCartClick = () => {
     navigate('/cart');
@@ -46,9 +48,11 @@ export function Header() {
               onClick={handleNotificationsClick}
             >
               <BellIcon className="w-5 h-5" />
-              <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-xs bg-shopping-secondary">
-                3
-              </Badge>
+              {unreadCount > 0 && (
+                <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-xs bg-shopping-secondary">
+                  {unreadCount}
+                </Badge>
+              )}
             </Button>
             
             <Button 
