@@ -82,14 +82,12 @@ export default function Cart() {
 
   const handleClothingCheckout = (action: "trial" | "purchase") => {
     const clothingItems = action === "purchase" ? clothingPurchaseItems : clothingTrialItems;
-    const totalAmount = clothingItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const tax = totalAmount * 0.18;
-    const total = totalAmount + tax;
+    const subtotalAmount = clothingItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
     if (action === "purchase") {
       setPaymentProduct({
         name: `${clothingItems.length} Clothing Items`,
-        price: total,
+        price: subtotalAmount, // Pass subtotal without tax
         brand: "Various Brands"
       });
       setShowPayment(true);
@@ -99,14 +97,12 @@ export default function Cart() {
   };
 
   const handleFoodCheckout = (action: "order" | "schedule") => {
-    const totalAmount = foodItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const tax = totalAmount * 0.18;
-    const total = totalAmount + tax;
+    const subtotalAmount = foodItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
     if (action === "order") {
       setPaymentProduct({
         name: `${foodItems.length} Food Items`,
-        price: total,
+        price: subtotalAmount, // Pass subtotal without tax
         brand: "Food Court"
       });
       setShowPayment(true);
