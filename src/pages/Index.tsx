@@ -73,9 +73,9 @@ const Index = () => {
         <div className="relative container mx-auto px-6 py-24 lg:py-32 z-10">
           <div className="max-w-4xl animate-fade-in-up">
             <div className="glass glass-hover rounded-3xl p-8 mb-8 max-w-2xl backdrop-blur-xl border-white/20">
-              <Badge className="mb-6 bg-shopping-primary/20 text-shopping-primary border-shopping-primary/40 backdrop-blur-sm font-medium">
+              <Badge className="mb-6 bg-white/10 text-white border-white/20 backdrop-blur-sm font-medium">
                 <MapPinIcon className="w-4 h-4 mr-2" />
-                Your Complete Mall Experience
+                Shop Smart, Shop Easy
               </Badge>
               
               <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
@@ -93,7 +93,7 @@ const Index = () => {
                 <Button 
                   asChild 
                   size="lg" 
-                  className="bg-shopping-primary hover:bg-shopping-primary/90 text-white text-lg px-8 py-4 magnetic shadow-lg font-semibold"
+                  className="glass glass-hover border-white/30 text-white hover:bg-white/20 text-lg px-8 py-4 magnetic font-semibold backdrop-blur-md"
                 >
                   <Link to="/clothing">Start Shopping</Link>
                 </Button>
@@ -102,7 +102,7 @@ const Index = () => {
                   asChild 
                   variant="outline" 
                   size="lg"
-                  className="glass glass-hover border-white/40 text-white hover:bg-white/20 text-lg px-8 py-4 magnetic font-semibold"
+                  className="glass glass-hover border-white/40 text-white hover:bg-white/20 text-lg px-8 py-4 magnetic font-semibold backdrop-blur-md"
                 >
                   <Link to="/food">Order Food</Link>
                 </Button>
