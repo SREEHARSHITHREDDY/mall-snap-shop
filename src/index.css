@@ -8,55 +8,55 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 245 40% 98%;
-    --foreground: 240 15% 15%;
+    --background: 0 0% 100%;
+    --foreground: 222 15% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 15% 15%;
+    --card-foreground: 222 15% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 15% 15%;
+    --popover-foreground: 222 15% 15%;
 
-    --primary: 264 83% 57%;
+    --primary: 220 70% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 15% 95%;
-    --secondary-foreground: 240 15% 25%;
+    --secondary: 210 40% 95%;
+    --secondary-foreground: 222 15% 25%;
 
-    --muted: 240 8% 96%;
-    --muted-foreground: 240 8% 55%;
+    --muted: 210 40% 98%;
+    --muted-foreground: 215 16% 45%;
 
-    --accent: 197 91% 56%;
+    --accent: 210 70% 55%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 240 8% 90%;
-    --input: 240 8% 94%;
-    --ring: 264 83% 57%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 220 70% 50%;
 
-    /* Shopping Matrix Custom Colors */
-    --shopping-primary: 264 83% 57%;
-    --shopping-secondary: 197 91% 56%;
-    --shopping-success: 142 76% 36%;
+    /* Shopping Matrix Custom Colors - Improved for accessibility */
+    --shopping-primary: 220 70% 50%;
+    --shopping-secondary: 200 85% 45%;
+    --shopping-success: 142 70% 45%;
     --shopping-warning: 38 92% 50%;
     --shopping-surface: 0 0% 100%;
-    --shopping-surface-variant: 240 8% 98%;
+    --shopping-surface-variant: 210 40% 98%;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(264 83% 57%) 0%, hsl(197 91% 56%) 100%);
-    --gradient-surface: linear-gradient(180deg, hsl(245 40% 98%) 0%, hsl(240 8% 96%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(240 8% 98%) 100%);
+    /* Gradients - Updated for better contrast */
+    --gradient-primary: linear-gradient(135deg, hsl(220 70% 50%) 0%, hsl(200 85% 45%) 100%);
+    --gradient-surface: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
     --gradient-glass: linear-gradient(135deg, hsla(0 0% 100% / 0.25) 0%, hsla(0 0% 100% / 0.1) 100%);
-    --gradient-glass-dark: linear-gradient(135deg, hsla(0 0% 0% / 0.2) 0%, hsla(0 0% 0% / 0.1) 100%);
+    --gradient-glass-dark: linear-gradient(135deg, hsla(220 15% 10% / 0.6) 0%, hsla(220 15% 10% / 0.3) 100%);
     
-    /* Shadows */
-    --shadow-card: 0 4px 16px -4px hsl(240 15% 15% / 0.08);
-    --shadow-elevated: 0 8px 32px -8px hsl(240 15% 15% / 0.12);
-    --shadow-glow: 0 0 40px hsl(264 83% 57% / 0.15);
-    --shadow-glass: 0 8px 32px 0 hsl(0 0% 0% / 0.1), inset 0 1px 0 hsl(0 0% 100% / 0.15);
-    --shadow-glass-hover: 0 20px 60px 0 hsl(0 0% 0% / 0.15), inset 0 1px 0 hsl(0 0% 100% / 0.2);
+    /* Shadows - Enhanced for better visibility */
+    --shadow-card: 0 4px 20px -4px hsl(220 15% 15% / 0.1);
+    --shadow-elevated: 0 8px 40px -8px hsl(220 15% 15% / 0.15);
+    --shadow-glow: 0 0 40px hsl(220 70% 50% / 0.2);
+    --shadow-glass: 0 8px 32px 0 hsl(220 15% 15% / 0.1), inset 0 1px 0 hsl(0 0% 100% / 0.15);
+    --shadow-glass-hover: 0 20px 60px 0 hsl(220 15% 15% / 0.15), inset 0 1px 0 hsl(0 0% 100% / 0.2);
     
     /* Animation */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -83,41 +83,41 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 84% 5%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222 84% 5%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 84% 5%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 220 70% 60%;
+    --primary-foreground: 222 47% 11%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 217 33% 17%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 220 70% 60%;
+
+    /* Shopping Matrix Dark Theme */
+    --shopping-primary: 220 70% 60%;
+    --shopping-secondary: 200 85% 55%;
+    --shopping-success: 142 70% 50%;
+    --shopping-warning: 38 92% 55%;
+    --shopping-surface: 222 84% 5%;
+    --shopping-surface-variant: 217 33% 17%;
   }
 }
 

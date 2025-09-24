@@ -13,7 +13,7 @@ import {
   ShieldCheckIcon,
   HeartIcon
 } from "lucide-react";
-import heroImage from "@/assets/hero-shopping-mall.jpg";
+import heroImage from "@/assets/hero-shopping-video-frame.jpg";
 
 const quickStats = [
   { label: "Active Stores", value: "150+", icon: ShoppingBagIcon },
@@ -48,39 +48,52 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-surface">
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-screen flex items-center">
+        {/* Video Background */}
         <div className="absolute inset-0">
-          <img 
-            src={heroImage} 
-            alt="Shopping Mall Interior"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70" />
+          <div className="relative w-full h-full">
+            {/* Placeholder for video - in production this would be a video element */}
+            <img 
+              src={heroImage} 
+              alt="People shopping in modern mall"
+              className="w-full h-full object-cover"
+            />
+            {/* Animated overlay to simulate video movement */}
+            <div className="absolute inset-0">
+              <div className="w-full h-full bg-gradient-to-r from-black/60 via-transparent to-black/60 animate-pulse"></div>
+              <div className="absolute top-0 left-0 w-full h-full">
+                <div className="absolute top-1/4 left-1/4 w-4 h-4 bg-white/20 rounded-full animate-float"></div>
+                <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-white/15 rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
+                <div className="absolute bottom-1/4 left-1/2 w-2 h-2 bg-white/10 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
+              </div>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/30 to-black/60" />
+          </div>
         </div>
         
-        <div className="relative container mx-auto px-6 py-24 lg:py-32">
+        <div className="relative container mx-auto px-6 py-24 lg:py-32 z-10">
           <div className="max-w-4xl animate-fade-in-up">
-            <div className="glass glass-hover rounded-2xl p-8 mb-8 max-w-2xl">
-              <Badge className="mb-6 bg-shopping-primary/20 text-shopping-primary border-shopping-primary/30 backdrop-blur-sm">
+            <div className="glass glass-hover rounded-3xl p-8 mb-8 max-w-2xl backdrop-blur-xl border-white/20">
+              <Badge className="mb-6 bg-shopping-primary/20 text-shopping-primary border-shopping-primary/40 backdrop-blur-sm font-medium">
                 <MapPinIcon className="w-4 h-4 mr-2" />
                 Your Complete Mall Experience
               </Badge>
               
-              <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 Welcome to{" "}
-                <span className="bg-gradient-primary bg-clip-text text-transparent shimmer">
+                <span className="bg-gradient-primary bg-clip-text text-transparent shimmer font-black">
                   Shopping Matrix
                 </span>
               </h1>
               
-              <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                Discover, order, and enjoy a seamless shopping experience with modern technology.
+              <p className="text-lg text-white/95 mb-8 leading-relaxed font-medium">
+                Experience seamless shopping with modern technology. Browse, reserve, and enjoy - all in one platform.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   asChild 
                   size="lg" 
-                  className="bg-gradient-primary hover:opacity-90 text-lg px-8 py-4 magnetic pulse-glow"
+                  className="bg-shopping-primary hover:bg-shopping-primary/90 text-white text-lg px-8 py-4 magnetic shadow-lg font-semibold"
                 >
                   <Link to="/clothing">Start Shopping</Link>
                 </Button>
@@ -89,7 +102,7 @@ const Index = () => {
                   asChild 
                   variant="outline" 
                   size="lg"
-                  className="glass glass-hover border-white/30 text-white hover:bg-white/20 text-lg px-8 py-4 magnetic"
+                  className="glass glass-hover border-white/40 text-white hover:bg-white/20 text-lg px-8 py-4 magnetic font-semibold"
                 >
                   <Link to="/food">Order Food</Link>
                 </Button>
@@ -99,8 +112,8 @@ const Index = () => {
         </div>
 
         {/* Floating Elements */}
-        <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-primary/20 rounded-full blur-xl float"></div>
-        <div className="absolute bottom-32 left-16 w-24 h-24 bg-shopping-secondary/20 rounded-full blur-xl float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-20 right-20 w-32 h-32 bg-shopping-primary/10 rounded-full blur-xl float"></div>
+        <div className="absolute bottom-32 left-16 w-24 h-24 bg-shopping-secondary/10 rounded-full blur-xl float" style={{ animationDelay: '2s' }}></div>
       </section>
 
       {/* Stats Section */}
