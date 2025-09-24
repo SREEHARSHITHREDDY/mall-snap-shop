@@ -100,9 +100,8 @@ const Index = () => {
                 
                 <Button 
                   asChild 
-                  variant="outline" 
                   size="lg"
-                  className="glass glass-hover border-white/40 text-white hover:bg-white/20 text-lg px-8 py-4 magnetic font-semibold backdrop-blur-md"
+                  className="glass glass-hover border-white/30 text-white hover:bg-white/20 text-lg px-8 py-4 magnetic font-semibold backdrop-blur-md"
                 >
                   <Link to="/food">Order Food</Link>
                 </Button>
