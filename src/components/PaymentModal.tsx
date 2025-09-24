@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { CreditCardIcon, SmartphoneIcon, BanknoteIcon, ShieldCheckIcon, ArrowLeftIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { CreditCardIcon, SmartphoneIcon, BanknoteIcon, ShieldCheckIcon, ArrowLeftIcon, TicketIcon } from "lucide-react";
 import { toast } from "sonner";
 
 interface PaymentModalProps {
@@ -45,11 +46,39 @@ const paymentMethods = [
 export function PaymentModal({ isOpen, onClose, product }: PaymentModalProps) {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponApplied, setCouponApplied] = useState(false);
 
   if (!product) return null;
 
-  const tax = product.price * 0.18;
-  const total = product.price + tax;
+  const discountAmount = (product.price * couponDiscount) / 100;
+  const discountedPrice = product.price - discountAmount;
+  const tax = discountedPrice * 0.18;
+  const total = discountedPrice + tax;
+
+  const applyCoupon = () => {
+    const validCoupons = {
+      "SAVE10": 10,
+      "FIRST20": 20,
+      "WELCOME15": 15,
+      "STUDENT25": 25
+    };
+    
+    if (validCoupons[couponCode as keyof typeof validCoupons]) {
+      setCouponDiscount(validCoupons[couponCode as keyof typeof validCoupons]);
+      setCouponApplied(true);
+      toast.success(`Coupon applied! ${validCoupons[couponCode as keyof typeof validCoupons]}% discount`);
+    } else {
+      toast.error("Invalid coupon code");
+    }
+  };
+
+  const removeCoupon = () => {
+    setCouponCode("");
+    setCouponDiscount(0);
+    setCouponApplied(false);
+  };
 
   const handlePaymentMethodSelect = (method: string) => {
     setSelectedPaymentMethod(method);
@@ -59,13 +88,20 @@ export function PaymentModal({ isOpen, onClose, product }: PaymentModalProps) {
   const handlePayment = () => {
     toast.success("Payment successful! Your order has been placed.");
     onClose();
-    setShowPaymentForm(false);
-    setSelectedPaymentMethod("");
+    resetModal();
   };
 
   const handleBack = () => {
     setShowPaymentForm(false);
     setSelectedPaymentMethod("");
+  };
+
+  const resetModal = () => {
+    setShowPaymentForm(false);
+    setSelectedPaymentMethod("");
+    setCouponCode("");
+    setCouponDiscount(0);
+    setCouponApplied(false);
   };
 
   return (
@@ -108,6 +144,12 @@ export function PaymentModal({ isOpen, onClose, product }: PaymentModalProps) {
                   <span>Subtotal</span>
                   <span>₹{product.price}</span>
                 </div>
+                {couponApplied && (
+                  <div className="flex justify-between text-sm text-green-600">
+                    <span>Discount ({couponDiscount}%)</span>
+                    <span>-₹{discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm">
                   <span>Tax (GST 18%)</span>
                   <span>₹{tax.toFixed(2)}</span>
@@ -116,6 +158,55 @@ export function PaymentModal({ isOpen, onClose, product }: PaymentModalProps) {
                 <div className="flex justify-between font-bold">
                   <span>Total Amount</span>
                   <span className="text-shopping-primary">₹{total.toFixed(2)}</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Coupon Section */}
+            <Card className="bg-shopping-surface">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <TicketIcon className="w-5 h-5" />
+                  Apply Coupon
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {!couponApplied ? (
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Enter coupon code"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      className="flex-1"
+                    />
+                    <Button 
+                      onClick={applyCoupon} 
+                      disabled={!couponCode}
+                      variant="outline"
+                    >
+                      Apply
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <TicketIcon className="w-4 h-4 text-green-600" />
+                      <span className="text-sm font-medium text-green-800">
+                        {couponCode} - {couponDiscount}% OFF
+                      </span>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={removeCoupon}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                )}
+                <div className="text-xs text-muted-foreground">
+                  Available codes: SAVE10, FIRST20, WELCOME15, STUDENT25
                 </div>
               </CardContent>
             </Card>

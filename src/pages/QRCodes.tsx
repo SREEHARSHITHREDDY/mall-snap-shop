@@ -23,7 +23,6 @@ const sampleQRCodes: QRCode[] = [
     status: "active",
     category: "clothing",
     createdAt: "2024-01-15 14:30",
-    expiresAt: "2024-01-15 16:30",
     items: ["2x Premium Cotton T-Shirt - Zara"]
   },
   {
@@ -33,7 +32,6 @@ const sampleQRCodes: QRCode[] = [
     status: "active",
     category: "food",
     createdAt: "2024-01-15 15:45",
-    expiresAt: "2024-01-15 16:05",
     items: ["1x Big Mac Combo - McDonald's", "2x Apple Pie - McDonald's"]
   },
   {
@@ -128,11 +126,9 @@ export default function QRCodes() {
                     <p className="text-sm text-muted-foreground">
                       Created: {new Date(qr.createdAt).toLocaleString()}
                     </p>
-                    {qr.expiresAt && (
-                      <p className="text-sm text-shopping-warning font-medium">
-                        Expires: {new Date(qr.expiresAt).toLocaleString()}
-                      </p>
-                    )}
+                    <p className="text-sm text-green-600 font-medium">
+                      Valid until order pickup
+                    </p>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div 
@@ -247,11 +243,9 @@ export default function QRCodes() {
                   <Badge variant={getStatusColor(selectedQR.status)}>
                     {selectedQR.status.toUpperCase()}
                   </Badge>
-                  {selectedQR.expiresAt && (
-                    <p className="text-sm text-shopping-warning">
-                      Expires: {new Date(selectedQR.expiresAt).toLocaleString()}
-                    </p>
-                  )}
+                  <p className="text-sm text-green-600">
+                    Valid until order pickup
+                  </p>
                 </div>
                 <div className="flex gap-2">
                   <Button 

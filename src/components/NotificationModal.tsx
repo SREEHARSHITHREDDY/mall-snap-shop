@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +10,7 @@ interface NotificationModalProps {
   onClose: () => void;
 }
 
-const sampleNotifications = [
+const initialNotifications = [
   {
     id: "1",
     type: "order",
@@ -37,6 +38,11 @@ const sampleNotifications = [
 ];
 
 export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
+  const [notifications, setNotifications] = useState(initialNotifications);
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(notif => ({ ...notif, isRead: true })));
+  };
   const getIcon = (type: string) => {
     switch (type) {
       case "order":
@@ -61,7 +67,7 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
         </DialogHeader>
         
         <div className="space-y-4 max-h-96 overflow-y-auto">
-          {sampleNotifications.map((notification, index) => (
+          {notifications.map((notification, index) => (
             <div key={notification.id}>
               <div className={`flex gap-3 p-3 rounded-lg ${
                 !notification.isRead ? 'bg-shopping-surface' : 'bg-transparent'
@@ -84,13 +90,13 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
                   </p>
                 </div>
               </div>
-              {index < sampleNotifications.length - 1 && <Separator className="my-2" />}
+              {index < notifications.length - 1 && <Separator className="my-2" />}
             </div>
           ))}
         </div>
         
         <div className="flex gap-2 pt-4">
-          <Button variant="outline" className="flex-1" onClick={onClose}>
+          <Button variant="outline" className="flex-1" onClick={markAllAsRead}>
             Mark All as Read
           </Button>
           <Button className="flex-1" onClick={onClose}>
