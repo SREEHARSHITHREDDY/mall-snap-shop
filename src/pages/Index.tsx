@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { 
   ShirtIcon, 
   UtensilsIcon, 
@@ -11,7 +13,13 @@ import {
   TrendingUpIcon,
   MapPinIcon,
   ShieldCheckIcon,
-  HeartIcon
+  HeartIcon,
+  StarIcon,
+  MessageCircleIcon,
+  GiftIcon,
+  ZapIcon,
+  UsersIcon,
+  ShoppingCartIcon
 } from "lucide-react";
 import heroImage from "@/assets/hero-shopping-video-frame.jpg";
 
@@ -40,10 +48,78 @@ const features = [
     description: "Find exactly what you need across all stores instantly",
     icon: SearchIcon,
     link: "/clothing"
+  },
+  {
+    title: "Secure Payments",
+    description: "Shop with confidence using our encrypted payment system",
+    icon: ShieldCheckIcon,
+    link: "/cart"
+  },
+  {
+    title: "Instant Deals",
+    description: "Get notified about flash sales and exclusive member offers",
+    icon: ZapIcon,
+    link: "/clothing"
+  },
+  {
+    title: "24/7 Support",
+    description: "Round-the-clock customer service for seamless shopping",
+    icon: MessageCircleIcon,
+    link: "/orders"
+  }
+];
+
+const featuredDeals = [
+  {
+    title: "Flash Sale",
+    description: "Up to 70% off on designer clothing",
+    discount: "70% OFF",
+    category: "Clothing",
+    icon: ShirtIcon,
+    link: "/clothing"
+  },
+  {
+    title: "Food Combo",
+    description: "Buy 2 meals, get 1 free from top restaurants",
+    discount: "Buy2Get1",
+    category: "Food",
+    icon: UtensilsIcon,
+    link: "/food"
+  },
+  {
+    title: "New Member",
+    description: "Extra 20% off on your first purchase",
+    discount: "20% OFF",
+    category: "Special",
+    icon: GiftIcon,
+    link: "/clothing"
+  }
+];
+
+const testimonials = [
+  {
+    name: "Sarah Johnson",
+    rating: 5,
+    comment: "Amazing experience! The try-before-buy feature saved me so much time.",
+    category: "Verified Buyer"
+  },
+  {
+    name: "Mike Chen",
+    rating: 5,
+    comment: "Food ordering is super convenient. No more waiting in long queues!",
+    category: "Food Lover"
+  },
+  {
+    name: "Emma Wilson",
+    rating: 5,
+    comment: "Best shopping app ever! Fast, reliable, and great customer service.",
+    category: "Regular Customer"
   }
 ];
 
 const Index = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <div className="min-h-screen bg-gradient-surface">
       {/* Hero Section */}
@@ -106,6 +182,24 @@ const Index = () => {
                   <Link to="/food">Order Food</Link>
                 </Button>
               </div>
+
+              {/* Search Bar */}
+              <div className="relative mt-8 max-w-md">
+                <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
+                <Input
+                  type="text"
+                  placeholder="Search products, brands, food..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 py-4 bg-white/10 border-white/20 text-white placeholder-white/60 backdrop-blur-md"
+                />
+                <Button 
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white border-white/20"
+                  size="sm"
+                >
+                  Search
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -155,48 +249,125 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {features.map((feature, index) => (
               <Link 
                 key={index} 
                 to={feature.link} 
                 className="group block animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.2}s` }}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="text-center space-y-8 parallax magnetic">
-                  <div className="relative">
-                    <div className="glass glass-hover w-28 h-28 mx-auto rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-500 shimmer">
-                      <feature.icon className="w-12 h-12 text-shopping-primary" />
-                    </div>
-                    <div className="absolute -top-3 -right-3 w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-lg font-bold text-white shadow-lg pulse-glow">
-                      {index + 1}
-                    </div>
-                    
-                    {/* Floating Ring */}
-                    <div className="absolute inset-0 w-32 h-32 mx-auto border-2 border-shopping-primary/20 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h3 className="text-2xl lg:text-3xl font-bold text-foreground group-hover:text-shopping-primary transition-colors duration-300">
-                      {feature.title}
-                    </h3>
-                    <p className="text-muted-foreground text-lg leading-relaxed max-w-sm mx-auto">
-                      {feature.description}
-                    </p>
-                    
-                    {/* Interactive Arrow */}
-                    <div className="pt-4">
-                      <div className="inline-flex items-center text-shopping-primary font-semibold opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                        Explore Now 
-                        <svg className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
+                <div className="glass glass-hover rounded-2xl p-8 h-full parallax magnetic">
+                  <div className="text-center space-y-6">
+                    <div className="relative">
+                      <div className="w-20 h-20 mx-auto rounded-full flex items-center justify-center bg-shopping-primary/10 group-hover:bg-shopping-primary/20 transition-all duration-300">
+                        <feature.icon className="w-10 h-10 text-shopping-primary group-hover:scale-110 transition-transform duration-300" />
                       </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <h3 className="text-xl font-bold text-foreground group-hover:text-shopping-primary transition-colors duration-300">
+                        {feature.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {feature.description}
+                      </p>
                     </div>
                   </div>
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Deals Section */}
+      <section className="py-20 bg-gradient-to-br from-shopping-primary/5 to-shopping-secondary/5">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Today's <span className="bg-gradient-primary bg-clip-text text-transparent">Hot Deals</span>
+            </h2>
+            <p className="text-muted-foreground text-lg">Limited time offers you can't miss</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {featuredDeals.map((deal, index) => (
+              <Link key={index} to={deal.link} className="group block">
+                <Card className="glass glass-hover h-full group-hover:scale-105 transition-all duration-300">
+                  <CardContent className="p-6 text-center space-y-4">
+                    <div className="relative">
+                      <div className="w-16 h-16 mx-auto rounded-full bg-shopping-primary/10 flex items-center justify-center">
+                        <deal.icon className="w-8 h-8 text-shopping-primary" />
+                      </div>
+                      <Badge className="absolute -top-2 -right-2 bg-red-500 text-white pulse-glow">
+                        {deal.discount}
+                      </Badge>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-foreground mb-2">{deal.title}</h3>
+                      <p className="text-muted-foreground text-sm mb-3">{deal.description}</p>
+                      <Badge variant="outline">{deal.category}</Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              What Our <span className="bg-gradient-primary bg-clip-text text-transparent">Customers Say</span>
+            </h2>
+            <p className="text-muted-foreground text-lg">Join thousands of satisfied shoppers</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="glass glass-hover">
+                <CardContent className="p-6 space-y-4">
+                  <div className="flex items-center gap-1 mb-3">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <StarIcon key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-muted-foreground italic">"{testimonial.comment}"</p>
+                  <div className="pt-4 border-t">
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.category}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-16 bg-gradient-to-r from-shopping-primary/10 to-shopping-secondary/10">
+        <div className="container mx-auto px-6 text-center">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
+              Stay Updated with Exclusive Deals
+            </h2>
+            <p className="text-muted-foreground mb-8">
+              Get notified about flash sales, new arrivals, and member-only offers
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1"
+              />
+              <Button className="bg-shopping-primary hover:bg-shopping-primary/90">
+                Subscribe
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -229,7 +400,10 @@ const Index = () => {
                 size="lg" 
                 className="glass glass-hover border-white/30 text-white hover:bg-white/20 text-lg px-10 py-4 magnetic backdrop-blur-md font-semibold"
               >
-                <Link to="/clothing">Browse Clothing</Link>
+                <Link to="/clothing">
+                  <ShoppingCartIcon className="w-5 h-5 mr-2" />
+                  Start Shopping Now
+                </Link>
               </Button>
               
               <Button 
@@ -237,8 +411,27 @@ const Index = () => {
                 size="lg"
                 className="glass glass-hover border-white/30 text-white hover:bg-white/20 text-lg px-10 py-4 magnetic backdrop-blur-md font-semibold"
               >
-                <Link to="/orders">View My Orders</Link>
+                <Link to="/food">
+                  <UtensilsIcon className="w-5 h-5 mr-2" />
+                  Order Delicious Food
+                </Link>
               </Button>
+            </div>
+            
+            {/* Quick Stats */}
+            <div className="flex flex-wrap justify-center gap-8 mt-12 text-white/80">
+              <div className="flex items-center gap-2">
+                <UsersIcon className="w-5 h-5" />
+                <span className="text-sm">10K+ Happy Customers</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ShieldCheckIcon className="w-5 h-5" />
+                <span className="text-sm">100% Secure Payments</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ZapIcon className="w-5 h-5" />
+                <span className="text-sm">Lightning Fast Delivery</span>
+              </div>
             </div>
           </div>
         </div>

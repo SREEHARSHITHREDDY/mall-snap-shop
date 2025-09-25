@@ -212,6 +212,7 @@ const allFoodItems = [
 
 export default function Food() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [orderType, setOrderType] = useState<"dine-in" | "takeaway">("dine-in");
   const { addToCart } = useCart();
 
   const handleBrandSelect = (brandId: string) => {
@@ -219,7 +220,10 @@ export default function Food() {
   };
 
   const filteredFoodItems = selectedBrand 
-    ? allFoodItems.filter(item => item.brand.toLowerCase() === selectedBrand.toLowerCase())
+    ? allFoodItems.filter(item => {
+        const brand = foodBrands.find(b => b.id === selectedBrand);
+        return brand && item.brand === brand.name;
+      })
     : allFoodItems;
 
   const handleAddToCart = (productId: string) => {
@@ -232,9 +236,10 @@ export default function Food() {
         image: product.image,
         brand: product.brand,
         category: product.category,
-        type: "purchase"
+        type: "purchase",
+        orderType: orderType
       });
-      toast.success(`${product.name} added to food order!`);
+      toast.success(`${product.name} added to ${orderType} order!`);
     }
   };
 
@@ -270,11 +275,31 @@ export default function Food() {
                   <ClockIcon className="w-4 h-4 text-muted-foreground" />
                   <span className="text-sm">Prep Time: 15-20 mins</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="default">Dine In Available</Badge>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium">Order Type:</span>
+                  <div className="flex gap-2">
+                    <Button
+                      variant={orderType === "dine-in" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setOrderType("dine-in")}
+                      className="text-xs"
+                    >
+                      Dine In
+                    </Button>
+                    <Button
+                      variant={orderType === "takeaway" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setOrderType("takeaway")}
+                      className="text-xs"
+                    >
+                      Takeaway
+                    </Button>
+                  </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary">Takeaway Available</Badge>
+                  <Badge variant={orderType === "takeaway" ? "default" : "secondary"}>
+                    {orderType === "takeaway" ? "Takeaway Selected" : "Dine In Selected"}
+                  </Badge>
                 </div>
               </div>
             </CardContent>

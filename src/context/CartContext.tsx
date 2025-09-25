@@ -11,6 +11,7 @@ interface CartItem {
   type: "purchase" | "trial";
   size?: string;
   color?: string;
+  orderType?: "dine-in" | "takeaway";
 }
 
 interface CartContextType {
