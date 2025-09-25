@@ -7,6 +7,11 @@ import { ArrowLeftIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
 
+// Calculate actual product counts for each brand
+const getBrandProductCount = (brandName: string) => {
+  return allProducts.filter(product => product.brand.toLowerCase() === brandName.toLowerCase()).length;
+};
+
 const clothingBrands = [
   {
     id: "zara",
@@ -15,7 +20,7 @@ const clothingBrands = [
     description: "Fashion-forward clothing for modern lifestyles",
     category: "clothing",
     isOpen: true,
-    productCount: 342
+    productCount: getBrandProductCount("Zara")
   },
   {
     id: "hm",
@@ -24,7 +29,7 @@ const clothingBrands = [
     description: "Sustainable fashion accessible to everyone",
     category: "clothing",
     isOpen: true,
-    productCount: 298
+    productCount: getBrandProductCount("H&M")
   },
   {
     id: "uniqlo",
@@ -33,7 +38,7 @@ const clothingBrands = [
     description: "Japanese casual wear and basics",
     category: "clothing", 
     isOpen: true,
-    productCount: 256
+    productCount: getBrandProductCount("Uniqlo")
   },
   {
     id: "adidas",
@@ -42,7 +47,7 @@ const clothingBrands = [
     description: "Sports and athleisure wear",
     category: "clothing",
     isOpen: true,
-    productCount: 198
+    productCount: getBrandProductCount("Adidas")
   },
   {
     id: "nike",
@@ -51,7 +56,7 @@ const clothingBrands = [
     description: "Athletic wear and performance gear",
     category: "clothing",
     isOpen: true,
-    productCount: 234
+    productCount: getBrandProductCount("Nike")
   },
   {
     id: "levis",
@@ -60,7 +65,7 @@ const clothingBrands = [
     description: "Premium denim and casual wear",
     category: "clothing",
     isOpen: true,
-    productCount: 167
+    productCount: getBrandProductCount("Levi's")
   }
 ];
 
