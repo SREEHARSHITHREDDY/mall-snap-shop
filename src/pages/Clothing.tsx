@@ -7,67 +7,6 @@ import { ArrowLeftIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
 
-// Calculate actual product counts for each brand
-const getBrandProductCount = (brandName: string) => {
-  return allProducts.filter(product => product.brand.toLowerCase() === brandName.toLowerCase()).length;
-};
-
-const clothingBrands = [
-  {
-    id: "zara",
-    name: "Zara", 
-    logo: "/api/placeholder/64/64",
-    description: "Fashion-forward clothing for modern lifestyles",
-    category: "clothing",
-    isOpen: true,
-    productCount: getBrandProductCount("Zara")
-  },
-  {
-    id: "hm",
-    name: "H&M",
-    logo: "/api/placeholder/64/64", 
-    description: "Sustainable fashion accessible to everyone",
-    category: "clothing",
-    isOpen: true,
-    productCount: getBrandProductCount("H&M")
-  },
-  {
-    id: "uniqlo",
-    name: "Uniqlo",
-    logo: "/api/placeholder/64/64",
-    description: "Japanese casual wear and basics",
-    category: "clothing", 
-    isOpen: true,
-    productCount: getBrandProductCount("Uniqlo")
-  },
-  {
-    id: "adidas",
-    name: "Adidas",
-    logo: "/api/placeholder/64/64",
-    description: "Sports and athleisure wear",
-    category: "clothing",
-    isOpen: true,
-    productCount: getBrandProductCount("Adidas")
-  },
-  {
-    id: "nike",
-    name: "Nike",
-    logo: "/api/placeholder/64/64",
-    description: "Athletic wear and performance gear",
-    category: "clothing",
-    isOpen: true,
-    productCount: getBrandProductCount("Nike")
-  },
-  {
-    id: "levis",
-    name: "Levi's",
-    logo: "/api/placeholder/64/64",
-    description: "Premium denim and casual wear",
-    category: "clothing",
-    isOpen: true,
-    productCount: getBrandProductCount("Levi's")
-  }
-];
 
 const allProducts = [
   // Zara Products
@@ -896,6 +835,68 @@ const allProducts = [
     fitStyle: "Regular Fit",
     description: "Comfortable hoodie with vintage Levi's graphics.",
     material: "60% Cotton, 40% Polyester"
+  }
+];
+
+// Calculate actual product counts for each brand
+const getBrandProductCount = (brandName: string) => {
+  return allProducts.filter(product => product.brand.toLowerCase() === brandName.toLowerCase()).length;
+};
+
+const clothingBrands = [
+  {
+    id: "zara",
+    name: "Zara", 
+    logo: "/api/placeholder/64/64",
+    description: "Fashion-forward clothing for modern lifestyles",
+    category: "clothing",
+    isOpen: true,
+    productCount: getBrandProductCount("Zara")
+  },
+  {
+    id: "hm",
+    name: "H&M",
+    logo: "/api/placeholder/64/64", 
+    description: "Sustainable fashion accessible to everyone",
+    category: "clothing",
+    isOpen: true,
+    productCount: getBrandProductCount("H&M")
+  },
+  {
+    id: "uniqlo",
+    name: "Uniqlo",
+    logo: "/api/placeholder/64/64",
+    description: "Japanese casual wear and basics",
+    category: "clothing", 
+    isOpen: true,
+    productCount: getBrandProductCount("Uniqlo")
+  },
+  {
+    id: "adidas",
+    name: "Adidas",
+    logo: "/api/placeholder/64/64",
+    description: "Sports and athleisure wear",
+    category: "clothing",
+    isOpen: true,
+    productCount: getBrandProductCount("Adidas")
+  },
+  {
+    id: "nike",
+    name: "Nike",
+    logo: "/api/placeholder/64/64",
+    description: "Athletic wear and performance gear",
+    category: "clothing",
+    isOpen: true,
+    productCount: getBrandProductCount("Nike")
+  },
+  {
+    id: "levis",
+    name: "Levi's",
+    logo: "/api/placeholder/64/64",
+    description: "Premium denim and casual wear",
+    category: "clothing",
+    isOpen: true,
+    productCount: getBrandProductCount("Levi's")
   }
 ];
 
