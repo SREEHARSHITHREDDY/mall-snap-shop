@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrandSection } from "@/components/BrandSection";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeftIcon, ClockIcon, MapPinIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
+import { useStock } from "@/context/StockContext";
 
 const foodBrands = [
   {
@@ -214,21 +215,54 @@ export default function Food() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [orderType, setOrderType] = useState<"dine-in" | "takeaway">("dine-in");
   const { addToCart } = useCart();
+  const { initializeStock, getStock, stockData } = useStock();
+
+  // Initialize stock data on component mount
+  useEffect(() => {
+    const stockItems = allFoodItems.map(item => ({
+      id: item.id,
+      stockCount: item.stockCount || 0,
+      category: item.category,
+      brand: item.brand
+    }));
+    initializeStock(stockItems);
+  }, [initializeStock]);
+
+  // Update food items with current stock data
+  const currentFoodItems = allFoodItems.map(item => ({
+    ...item,
+    stockCount: getStock(item.id) || item.stockCount || 0,
+    inStock: (getStock(item.id) || item.stockCount || 0) > 0
+  }));
+
+  // Update brand product counts with current stock
+  const updatedFoodBrands = foodBrands.map(brand => {
+    const brandItems = currentFoodItems.filter(item => item.brand === brand.name);
+    const availableCount = brandItems.filter(item => item.inStock).length;
+    const totalStock = brandItems.reduce((sum, item) => sum + item.stockCount, 0);
+    
+    return {
+      ...brand,
+      productCount: availableCount,
+      totalStock: totalStock,
+      isOpen: availableCount > 0 // Restaurant is open if it has stock
+    };
+  });
 
   const handleBrandSelect = (brandId: string) => {
     setSelectedBrand(brandId);
   };
 
   const filteredFoodItems = selectedBrand 
-    ? allFoodItems.filter(item => {
-        const brand = foodBrands.find(b => b.id === selectedBrand);
+    ? currentFoodItems.filter(item => {
+        const brand = updatedFoodBrands.find(b => b.id === selectedBrand);
         return brand && item.brand === brand.name;
       })
-    : allFoodItems;
+    : currentFoodItems;
 
   const handleAddToCart = (productId: string) => {
-    const product = allFoodItems.find(p => p.id === productId);
-    if (product) {
+    const product = currentFoodItems.find(p => p.id === productId);
+    if (product && product.inStock && product.stockCount > 0) {
       addToCart({
         id: `${productId}-${Date.now()}`,
         name: product.name,
@@ -240,11 +274,13 @@ export default function Food() {
         orderType: orderType
       });
       toast.success(`${product.name} added to ${orderType} order!`);
+    } else {
+      toast.error(`${product?.name || 'Item'} is out of stock!`);
     }
   };
 
   if (selectedBrand) {
-    const brand = foodBrands.find(b => b.id === selectedBrand);
+    const brand = updatedFoodBrands.find(b => b.id === selectedBrand);
     
     return (
       <div className="min-h-screen bg-gradient-surface">
@@ -324,7 +360,7 @@ export default function Food() {
       <div className="container mx-auto px-6 py-8">
         <BrandSection
           title="Food Court & Restaurants"
-          brands={foodBrands}
+          brands={updatedFoodBrands}
           onBrandSelect={handleBrandSelect}
         />
       </div>

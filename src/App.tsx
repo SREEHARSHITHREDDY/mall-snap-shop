@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainLayout } from "@/components/MainLayout";
 import { CartProvider } from "@/context/CartContext";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { OrderProvider } from "@/context/OrderContext";
+import { StockProvider } from "@/context/StockContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Clothing from "./pages/Clothing";
@@ -20,8 +22,10 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <NotificationProvider>
-      <CartProvider>
-        <TooltipProvider>
+      <StockProvider>
+        <OrderProvider>
+          <CartProvider>
+            <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -39,8 +43,10 @@ const App = () => (
               </Routes>
             </MainLayout>
           </BrowserRouter>
-        </TooltipProvider>
-      </CartProvider>
+            </TooltipProvider>
+          </CartProvider>
+        </OrderProvider>
+      </StockProvider>
     </NotificationProvider>
   </QueryClientProvider>
 );

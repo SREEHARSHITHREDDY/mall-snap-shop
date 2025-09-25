@@ -4,60 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QrCodeIcon, ClockIcon, CheckCircleIcon, TruckIcon } from "lucide-react";
+import { useOrders, Order } from "@/context/OrderContext";
 
-interface Order {
-  id: string;
-  items: Array<{
-    name: string;
-    quantity: number;
-    price: number;
-    brand: string;
-  }>;
-  total: number;
-  status: "preparing" | "ready" | "collected" | "delivered";
-  category: "clothing" | "food" | "other";
-  orderTime: string;
-  estimatedTime?: string;
-  qrCode: string;
-}
-
-const sampleOrders: Order[] = [
-  {
-    id: "ORD-001",
-    items: [
-      { name: "Premium Cotton T-Shirt", quantity: 2, price: 1299, brand: "Zara" },
-    ],
-    total: 2598,
-    status: "ready",
-    category: "clothing",
-    orderTime: "2024-01-15 14:30",
-    qrCode: "QR001",
-  },
-  {
-    id: "ORD-002",
-    items: [
-      { name: "Big Mac Combo", quantity: 1, price: 299, brand: "McDonald's" },
-      { name: "Apple Pie", quantity: 2, price: 65, brand: "McDonald's" },
-    ],
-    total: 429,
-    status: "preparing",
-    category: "food",
-    orderTime: "2024-01-15 15:45",
-    estimatedTime: "16:05",
-    qrCode: "QR002",
-  },
-  {
-    id: "ORD-003",
-    items: [
-      { name: "Wireless Headphones", quantity: 1, price: 4999, brand: "Sony" },
-    ],
-    total: 4999,
-    status: "collected",
-    category: "other",
-    orderTime: "2024-01-14 11:20",
-    qrCode: "QR003",
-  },
-];
 
 const getStatusColor = (status: Order['status']) => {
   switch (status) {
@@ -104,15 +52,11 @@ const getStatusText = (order: Order) => {
 };
 
 export default function Orders() {
-  const [orders] = useState<Order[]>(sampleOrders);
+  const { getActiveOrders, getCompletedOrders } = useOrders();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  const activeOrders = orders.filter(order => 
-    order.status === "preparing" || order.status === "ready"
-  );
-  const completedOrders = orders.filter(order => 
-    order.status === "collected" || order.status === "delivered"
-  );
+  const activeOrders = getActiveOrders();
+  const completedOrders = getCompletedOrders();
 
   const showQRCode = (order: Order) => {
     setSelectedOrder(order);
@@ -148,9 +92,14 @@ export default function Orders() {
                           {getStatusText(order)}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Ordered: {new Date(order.orderTime).toLocaleString()}
-                      </p>
+                       <p className="text-sm text-muted-foreground">
+                         Ordered: {new Date(order.orderTime).toLocaleString()}
+                       </p>
+                       {order.orderType && (
+                         <Badge variant="outline" className="text-xs w-fit">
+                           {order.orderType === "dine-in" ? "Dine In" : "Takeaway"}
+                         </Badge>
+                       )}
                       {order.estimatedTime && (
                         <p className="text-sm text-shopping-primary font-medium">
                           Estimated ready: {order.estimatedTime}
@@ -207,9 +156,14 @@ export default function Orders() {
                           {getStatusText(order)}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Ordered: {new Date(order.orderTime).toLocaleString()}
-                      </p>
+                       <p className="text-sm text-muted-foreground">
+                         Ordered: {new Date(order.orderTime).toLocaleString()}
+                       </p>
+                       {order.orderType && (
+                         <Badge variant="outline" className="text-xs w-fit">
+                           {order.orderType === "dine-in" ? "Dine In" : "Takeaway"}
+                         </Badge>
+                       )}
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="space-y-2">

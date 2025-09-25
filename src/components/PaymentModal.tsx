@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { CreditCardIcon, SmartphoneIcon, BanknoteIcon, ShieldCheckIcon, ArrowLeftIcon, TicketIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useOrders } from "@/context/OrderContext";
+import { useCart } from "@/context/CartContext";
+import { useStock } from "@/context/StockContext";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -49,6 +52,10 @@ export function PaymentModal({ isOpen, onClose, product }: PaymentModalProps) {
   const [couponCode, setCouponCode] = useState("");
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
+  
+  const { addOrder } = useOrders();
+  const { cartItems, clearCart } = useCart();
+  const { updateStock } = useStock();
 
   if (!product) return null;
 
@@ -86,6 +93,43 @@ export function PaymentModal({ isOpen, onClose, product }: PaymentModalProps) {
   };
 
   const handlePayment = () => {
+    // Create order from cart items
+    const orderItems = cartItems.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      brand: item.brand,
+      image: item.image,
+      category: item.category,
+      type: item.type,
+      size: item.size,
+      color: item.color,
+      orderType: item.orderType
+    }));
+
+    // Determine order category (prioritize food orders)
+    const hasFood = orderItems.some(item => item.category === 'food');
+    const category = hasFood ? 'food' : orderItems[0]?.category || 'other';
+
+    // Create the order
+    addOrder({
+      items: orderItems,
+      total: total,
+      status: category === 'food' ? 'preparing' : 'ready',
+      category: category,
+      paymentMethod: selectedPaymentMethod,
+      orderType: orderItems[0]?.orderType
+    });
+
+    // Update stock for all items
+    orderItems.forEach(item => {
+      updateStock(item.id, item.quantity);
+    });
+
+    // Clear the cart
+    clearCart();
+
     toast.success("Payment successful! Your order has been placed.");
     onClose();
     resetModal();
