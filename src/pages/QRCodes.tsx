@@ -3,54 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { QrCodeIcon, DownloadIcon, ShareIcon, RefreshCcwIcon } from "lucide-react";
+import { useOrders, Order } from "@/context/OrderContext";
 
-interface QRCode {
-  id: string;
-  orderId: string;
-  qrCode: string;
-  status: "active" | "used" | "expired";
-  category: "clothing" | "food" | "other";
-  createdAt: string;
-  expiresAt?: string;
-  items: string[];
-}
-
-const sampleQRCodes: QRCode[] = [
-  {
-    id: "qr1",
-    orderId: "ORD-001",
-    qrCode: "QR001",
-    status: "active",
-    category: "clothing",
-    createdAt: "2024-01-15 14:30",
-    items: ["2x Premium Cotton T-Shirt - Zara"]
-  },
-  {
-    id: "qr2",
-    orderId: "ORD-002",
-    qrCode: "QR002",
-    status: "active",
-    category: "food",
-    createdAt: "2024-01-15 15:45",
-    items: ["1x Big Mac Combo - McDonald's", "2x Apple Pie - McDonald's"]
-  },
-  {
-    id: "qr3",
-    orderId: "ORD-003",
-    qrCode: "QR003",
-    status: "used", 
-    category: "other",
-    createdAt: "2024-01-14 11:20",
-    items: ["1x Wireless Headphones - Sony"]
-  }
-];
-
-const getStatusColor = (status: QRCode['status']) => {
+const getStatusColor = (status: Order['status'] | 'used' | 'expired') => {
   switch (status) {
-    case "active":
+    case "preparing":
+    case "ready":
       return "default";
+    case "collected":
+    case "delivered":
     case "used":
-      return "success" as "default";
+      return "outline";
     case "expired":
       return "destructive";
     default:
@@ -58,7 +21,7 @@ const getStatusColor = (status: QRCode['status']) => {
   }
 };
 
-const getCategoryColor = (category: QRCode['category']) => {
+const getCategoryColor = (category: Order['category']) => {
   switch (category) {
     case "clothing":
       return "bg-blue-100 text-blue-800";
@@ -72,24 +35,24 @@ const getCategoryColor = (category: QRCode['category']) => {
 };
 
 export default function QRCodes() {
-  const [qrCodes] = useState<QRCode[]>(sampleQRCodes);
-  const [selectedQR, setSelectedQR] = useState<QRCode | null>(null);
+  const { getActiveOrders, getCompletedOrders } = useOrders();
+  const [selectedQR, setSelectedQR] = useState<Order | null>(null);
 
-  const activeQRs = qrCodes.filter(qr => qr.status === "active");
-  const usedQRs = qrCodes.filter(qr => qr.status === "used" || qr.status === "expired");
+  const activeOrders = getActiveOrders();
+  const completedOrders = getCompletedOrders();
 
-  const downloadQR = (qrCode: QRCode) => {
-    console.log("Downloading QR code:", qrCode.qrCode);
+  const downloadQR = (order: Order) => {
+    console.log("Downloading QR code:", order.qrCode);
     // In a real app, this would generate and download the QR code image
   };
 
-  const shareQR = (qrCode: QRCode) => {
-    console.log("Sharing QR code:", qrCode.qrCode);
+  const shareQR = (order: Order) => {
+    console.log("Sharing QR code:", order.qrCode);
     // In a real app, this would open share options
   };
 
-  const refreshQR = (qrCode: QRCode) => {
-    console.log("Refreshing QR code:", qrCode.qrCode);
+  const refreshQR = (order: Order) => {
+    console.log("Refreshing QR code:", order.qrCode);
     // In a real app, this would generate a new QR code
   };
 
@@ -101,7 +64,7 @@ export default function QRCodes() {
         {/* Active QR Codes */}
         <div className="mb-12">
           <h2 className="text-2xl font-semibold text-foreground mb-6">Active QR Codes</h2>
-          {activeQRs.length === 0 ? (
+          {activeOrders.length === 0 ? (
             <Card className="text-center p-8 bg-gradient-card">
               <QrCodeIcon className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
               <h3 className="text-xl font-bold mb-2">No active QR codes</h3>
@@ -109,22 +72,22 @@ export default function QRCodes() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {activeQRs.map((qr) => (
-                <Card key={qr.id} className="bg-gradient-card hover:shadow-elevated transition-smooth">
+              {activeOrders.map((order) => (
+                <Card key={order.id} className="bg-gradient-card hover:shadow-elevated transition-smooth">
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">Order #{qr.orderId}</CardTitle>
+                      <CardTitle className="text-lg">Order #{order.id}</CardTitle>
                       <div className="flex gap-2">
-                        <Badge variant={getStatusColor(qr.status)}>
-                          {qr.status.toUpperCase()}
+                        <Badge variant={getStatusColor(order.status)}>
+                          {order.status.toUpperCase()}
                         </Badge>
-                        <Badge className={getCategoryColor(qr.category)}>
-                          {qr.category.toUpperCase()}
+                        <Badge className={getCategoryColor(order.category)}>
+                          {order.category.toUpperCase()}
                         </Badge>
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Created: {new Date(qr.createdAt).toLocaleString()}
+                      Created: {new Date(order.orderTime).toLocaleString()}
                     </p>
                     <p className="text-sm text-green-600 font-medium">
                       Valid until order pickup
@@ -133,15 +96,15 @@ export default function QRCodes() {
                   <CardContent className="space-y-4">
                     <div 
                       className="w-32 h-32 mx-auto bg-white rounded-lg flex items-center justify-center border cursor-pointer hover:shadow-md transition-smooth"
-                      onClick={() => setSelectedQR(qr)}
+                      onClick={() => setSelectedQR(order)}
                     >
                       <QrCodeIcon className="w-24 h-24 text-gray-300" />
                     </div>
                     
                     <div className="space-y-1">
                       <p className="text-sm font-medium">Items:</p>
-                      {qr.items.map((item, index) => (
-                        <p key={index} className="text-xs text-muted-foreground">• {item}</p>
+                      {order.items.map((item, index) => (
+                        <p key={index} className="text-xs text-muted-foreground">• {item.quantity}x {item.name}</p>
                       ))}
                     </div>
 
@@ -149,7 +112,7 @@ export default function QRCodes() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => downloadQR(qr)}
+                        onClick={() => downloadQR(order)}
                         className="flex-1"
                       >
                         <DownloadIcon className="w-4 h-4 mr-1" />
@@ -158,7 +121,7 @@ export default function QRCodes() {
                       <Button
                         variant="outline" 
                         size="sm"
-                        onClick={() => shareQR(qr)}
+                        onClick={() => shareQR(order)}
                         className="flex-1"
                       >
                         <ShareIcon className="w-4 h-4 mr-1" />
@@ -167,7 +130,7 @@ export default function QRCodes() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => refreshQR(qr)}
+                        onClick={() => refreshQR(order)}
                       >
                         <RefreshCcwIcon className="w-4 h-4" />
                       </Button>
@@ -182,7 +145,7 @@ export default function QRCodes() {
         {/* Used QR Codes */}
         <div>
           <h2 className="text-2xl font-semibold text-foreground mb-6">Previous QR Codes</h2>
-          {usedQRs.length === 0 ? (
+          {completedOrders.length === 0 ? (
             <Card className="text-center p-8 bg-gradient-card opacity-75">
               <QrCodeIcon className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
               <h3 className="text-xl font-bold mb-2">No previous QR codes</h3>
@@ -190,22 +153,22 @@ export default function QRCodes() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {usedQRs.map((qr) => (
-                <Card key={qr.id} className="bg-gradient-card opacity-75">
+              {completedOrders.map((order) => (
+                <Card key={order.id} className="bg-gradient-card opacity-75">
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">Order #{qr.orderId}</CardTitle>
+                      <CardTitle className="text-lg">Order #{order.id}</CardTitle>
                       <div className="flex gap-2">
-                        <Badge variant={getStatusColor(qr.status)}>
-                          {qr.status.toUpperCase()}
+                        <Badge variant={getStatusColor("used")}>
+                          USED
                         </Badge>
-                        <Badge className={getCategoryColor(qr.category)}>
-                          {qr.category.toUpperCase()}
+                        <Badge className={getCategoryColor(order.category)}>
+                          {order.category.toUpperCase()}
                         </Badge>
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Created: {new Date(qr.createdAt).toLocaleString()}
+                      Created: {new Date(order.orderTime).toLocaleString()}
                     </p>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -215,8 +178,8 @@ export default function QRCodes() {
                     
                     <div className="space-y-1">
                       <p className="text-sm font-medium">Items:</p>
-                      {qr.items.map((item, index) => (
-                        <p key={index} className="text-xs text-muted-foreground">• {item}</p>
+                      {order.items.map((item, index) => (
+                        <p key={index} className="text-xs text-muted-foreground">• {item.quantity}x {item.name}</p>
                       ))}
                     </div>
                   </CardContent>
@@ -231,7 +194,7 @@ export default function QRCodes() {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setSelectedQR(null)}>
             <Card className="w-full max-w-md mx-4 bg-gradient-card" onClick={(e) => e.stopPropagation()}>
               <CardHeader className="text-center">
-                <CardTitle>QR Code - Order #{selectedQR.orderId}</CardTitle>
+                <CardTitle>QR Code - Order #{selectedQR.id}</CardTitle>
                 <p className="text-sm text-muted-foreground">Show this QR code to collect your order</p>
               </CardHeader>
               <CardContent className="text-center space-y-4">
