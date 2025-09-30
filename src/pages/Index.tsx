@@ -123,6 +123,46 @@ const Index = () => {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      
+      // Define category keywords
+      const foodKeywords = ['food', 'burger', 'pizza', 'chicken', 'fries', 'sandwich', 'coffee', 'meal', 'mcdonalds', 'kfc', 'starbucks', 'subway'];
+      const techKeywords = ['phone', 'iphone', 'ipad', 'macbook', 'laptop', 'computer', 'headphone', 'airpods', 'watch', 'playstation', 'ps5', 'console', 'electronic'];
+      const bookKeywords = ['book', 'novel', 'magazine', 'notebook', 'stationery', 'reading'];
+      const sportsKeywords = ['sports', 'bike', 'yoga', 'camping', 'tent', 'hiking', 'gym', 'fitness'];
+      const beautyKeywords = ['beauty', 'cosmetic', 'skincare', 'mask', 'bath', 'shampoo', 'lush'];
+      
+      // Check for food items
+      if (foodKeywords.some(keyword => query.includes(keyword))) {
+        navigate(`/food`);
+        return;
+      }
+      
+      // Check for tech/electronics
+      if (techKeywords.some(keyword => query.includes(keyword))) {
+        navigate(`/other`);
+        return;
+      }
+      
+      // Check for books
+      if (bookKeywords.some(keyword => query.includes(keyword))) {
+        navigate(`/other`);
+        return;
+      }
+      
+      // Check for sports items
+      if (sportsKeywords.some(keyword => query.includes(keyword))) {
+        navigate(`/other`);
+        return;
+      }
+      
+      // Check for beauty items
+      if (beautyKeywords.some(keyword => query.includes(keyword))) {
+        navigate(`/other`);
+        return;
+      }
+      
+      // Default to clothing for everything else (clothes, bags, shoes, etc.)
       navigate(`/clothing?search=${encodeURIComponent(searchQuery)}`);
     }
   };
