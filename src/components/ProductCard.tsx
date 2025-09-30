@@ -104,19 +104,19 @@ export function ProductCard({
             <Button 
               variant="outline" 
               size="sm" 
-              className="w-full text-xs sm:text-sm"
+              className="w-full text-[11px] px-2"
               onClick={handleReserveTrial}
               disabled={!inStock}
             >
-              Reserve for Trial
+              Try
             </Button>
             <Button 
               size="sm" 
-              className="w-full bg-gradient-primary hover:opacity-90 text-xs sm:text-sm"
+              className="w-full bg-gradient-primary hover:opacity-90 text-[11px] px-2"
               onClick={handleAddToCart}
               disabled={!inStock}
             >
-              <ShoppingCartIcon className="w-4 h-4 mr-1" />
+              <ShoppingCartIcon className="w-3.5 h-3.5 mr-1" />
               Buy
             </Button>
           </div>
