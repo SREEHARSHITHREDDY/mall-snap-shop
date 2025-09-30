@@ -1058,8 +1058,10 @@ export default function Clothing() {
   };
 
   const filteredProducts = allProducts.filter(product => {
-    const matchesBrand = !selectedBrand || 
-      product.brand.toLowerCase().replace("'", "").replace("'", "") === selectedBrand.toLowerCase().replace("'", "").replace("'", "");
+    const matchesBrand = !selectedBrand || (() => {
+      const brand = clothingBrands.find(b => b.id === selectedBrand);
+      return brand && product.brand === brand.name;
+    })();
     
     const matchesSearch = !activeSearchQuery || 
       matchesSimilarTerms(product.name, activeSearchQuery) ||
