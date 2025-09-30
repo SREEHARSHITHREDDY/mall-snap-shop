@@ -19,7 +19,10 @@ import QRCodes from "./pages/QRCodes";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  console.log('Shopping Matrix App Initialized');
+  
+  return (
   <QueryClientProvider client={queryClient}>
     <NotificationProvider>
       <StockProvider>
@@ -49,6 +52,7 @@ const App = () => (
       </StockProvider>
     </NotificationProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
