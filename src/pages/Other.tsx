@@ -11,30 +11,30 @@ import { useCart } from "@/context/CartContext";
 const otherBrands = [
   {
     id: "nike",
-    name: "Nike",
+    name: "Nike Store",
     logo: "/api/placeholder/64/64",
-    description: "Athletic footwear and sneakers",
-    category: "footwear",
-    isOpen: true,
-    productCount: 2
-  },
-  {
-    id: "adidas",
-    name: "Adidas",
-    logo: "/api/placeholder/64/64",
-    description: "Sports shoes and accessories",
+    description: "Athletic footwear and sports accessories",
     category: "footwear",
     isOpen: true,
     productCount: 3
   },
   {
-    id: "bags",
-    name: "Fashion Accessories",
+    id: "adidas",
+    name: "Adidas Store",
     logo: "/api/placeholder/64/64",
-    description: "Bags, backpacks, and accessories",
-    category: "accessories",
+    description: "Sports shoes and gym accessories",
+    category: "footwear",
     isOpen: true,
     productCount: 5
+  },
+  {
+    id: "bags",
+    name: "Accessory World",
+    logo: "/api/placeholder/64/64",
+    description: "Premium bags and fashion accessories",
+    category: "accessories",
+    isOpen: true,
+    productCount: 2
   },
   {
     id: "sony",
@@ -93,13 +93,13 @@ const otherBrands = [
 ];
 
 const sampleProducts = [
-  // Nike Sneakers
+  // Nike Store - Sneakers & Accessories
   {
     id: "nike-sneaker-1",
     name: "Air Force 1 Sneakers",
     price: 7999,
     image: "/api/placeholder/300/300",
-    brand: "Nike",
+    brand: "Nike Store",
     rating: 4.8,
     inStock: true,
     stockCount: 11,
@@ -110,20 +110,31 @@ const sampleProducts = [
     name: "Revolution 6 Running Shoes",
     price: 4999,
     image: "/api/placeholder/300/300",
-    brand: "Nike",
+    brand: "Nike Store",
     rating: 4.3,
     inStock: true,
     stockCount: 12,
     category: "other" as const
   },
+  {
+    id: "nike-bag-1",
+    name: "Sport Backpack",
+    price: 2499,
+    image: "/api/placeholder/300/300",
+    brand: "Nike Store",
+    rating: 4.6,
+    inStock: true,
+    stockCount: 12,
+    category: "other" as const
+  },
 
-  // Adidas Sneakers
+  // Adidas Store - Sneakers & Accessories
   {
     id: "adidas-sneaker-1",
     name: "Classic White Sneakers",
     price: 3999,
     image: "/api/placeholder/300/300",
-    brand: "Adidas",
+    brand: "Adidas Store",
     rating: 4.7,
     inStock: true,
     stockCount: 15,
@@ -134,7 +145,7 @@ const sampleProducts = [
     name: "Ultraboost 22 Running Shoes",
     price: 8999,
     image: "/api/placeholder/300/300",
-    brand: "Adidas",
+    brand: "Adidas Store",
     rating: 4.8,
     inStock: true,
     stockCount: 12,
@@ -145,23 +156,10 @@ const sampleProducts = [
     name: "Stan Smith Sneakers",
     price: 5999,
     image: "/api/placeholder/300/300",
-    brand: "Adidas",
+    brand: "Adidas Store",
     rating: 4.6,
     inStock: true,
     stockCount: 9,
-    category: "other" as const
-  },
-
-  // Bags & Backpacks
-  {
-    id: "nike-bag-1",
-    name: "Sport Backpack",
-    price: 2499,
-    image: "/api/placeholder/300/300",
-    brand: "Nike Store",
-    rating: 4.6,
-    inStock: true,
-    stockCount: 12,
     category: "other" as const
   },
   {
@@ -186,12 +184,14 @@ const sampleProducts = [
     stockCount: 6,
     category: "other" as const
   },
+
+  // Accessory World - Fashion Bags
   {
     id: "fashion-bag-1",
     name: "Leather Crossbody Bag",
     price: 2999,
     image: "/api/placeholder/300/300",
-    brand: "Fashion Accessories",
+    brand: "Accessory World",
     rating: 4.5,
     inStock: true,
     stockCount: 8,
@@ -202,7 +202,7 @@ const sampleProducts = [
     name: "Canvas Tote Bag",
     price: 1499,
     image: "/api/placeholder/300/300",
-    brand: "Fashion Accessories",
+    brand: "Accessory World",
     rating: 4.3,
     inStock: true,
     stockCount: 15,
