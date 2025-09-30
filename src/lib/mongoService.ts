@@ -1,10 +1,5 @@
-import { supabase } from "@/integrations/supabase/client";
-
-const FUNCTION_NAME = "mongoHandler";
-
-/**
- * Generic MongoDB service for multi-collection CRUD operations
- */
+const PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+const BASE_URL = `https://${PROJECT_ID}.supabase.co/functions/v1/mongoHandler`;
 
 export interface MongoDocument {
   _id?: string;
@@ -20,13 +15,9 @@ export async function getCollection(
   collection: string,
   limit: number = 20
 ): Promise<MongoDocument[]> {
-  const { data, error } = await supabase.functions.invoke(FUNCTION_NAME, {
-    body: { collection, limit },
-    method: "GET",
-  });
-
-  if (error) throw error;
-  return data || [];
+  const res = await fetch(`${BASE_URL}/${collection}?limit=${limit}`);
+  if (!res.ok) throw new Error(`Failed to fetch ${collection}`);
+  return res.json();
 }
 
 /**
@@ -37,18 +28,13 @@ export async function getCollectionCursor(
   lastId: string | null = null,
   limit: number = 5
 ): Promise<MongoDocument[]> {
-  const path = `${collection}/cursor`;
-  const params = new URLSearchParams();
-  if (lastId) params.append("lastId", lastId);
-  params.append("limit", limit.toString());
-
-  const { data, error } = await supabase.functions.invoke(
-    `${FUNCTION_NAME}/${path}?${params.toString()}`,
-    { method: "GET" }
-  );
-
-  if (error) throw error;
-  return data || [];
+  const url = new URL(`${BASE_URL}/${collection}/cursor`);
+  if (lastId) url.searchParams.append("lastId", lastId);
+  url.searchParams.append("limit", limit.toString());
+  
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error(`Failed to fetch ${collection} with cursor`);
+  return res.json();
 }
 
 /**
@@ -58,16 +44,14 @@ export async function addDocument(
   collection: string,
   doc: Omit<MongoDocument, "_id" | "createdAt">
 ): Promise<{ success: boolean; insertedId: string }> {
-  const { data, error } = await supabase.functions.invoke(
-    `${FUNCTION_NAME}/${collection}`,
-    {
-      method: "POST",
-      body: doc,
-    }
-  );
-
-  if (error) throw error;
-  return data;
+  const res = await fetch(`${BASE_URL}/${collection}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(doc),
+  });
+  
+  if (!res.ok) throw new Error(`Failed to add document to ${collection}`);
+  return res.json();
 }
 
 /**
@@ -78,16 +62,14 @@ export async function updateDocument(
   id: string,
   updates: Partial<MongoDocument>
 ): Promise<{ success: boolean; modifiedCount: number }> {
-  const { data, error } = await supabase.functions.invoke(
-    `${FUNCTION_NAME}/${collection}/${id}`,
-    {
-      method: "PUT",
-      body: updates,
-    }
-  );
-
-  if (error) throw error;
-  return data;
+  const res = await fetch(`${BASE_URL}/${collection}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  });
+  
+  if (!res.ok) throw new Error(`Failed to update document in ${collection}`);
+  return res.json();
 }
 
 /**
@@ -97,11 +79,10 @@ export async function deleteDocument(
   collection: string,
   id: string
 ): Promise<{ success: boolean; deletedCount: number }> {
-  const { data, error } = await supabase.functions.invoke(
-    `${FUNCTION_NAME}/${collection}/${id}`,
-    { method: "DELETE" }
-  );
-
-  if (error) throw error;
-  return data;
+  const res = await fetch(`${BASE_URL}/${collection}/${id}`, {
+    method: "DELETE",
+  });
+  
+  if (!res.ok) throw new Error(`Failed to delete document from ${collection}`);
+  return res.json();
 }
