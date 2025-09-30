@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { BrandSection } from "@/components/BrandSection";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductDetailModal } from "@/components/ProductDetailModal";
 import { Button } from "@/components/ui/button";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, SearchIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
 
@@ -903,15 +905,33 @@ const clothingBrands = [
 export default function Clothing() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const [localSearchQuery, setLocalSearchQuery] = useState("");
   const { addToCart } = useCart();
+
+  const searchQuery = searchParams.get('search') || "";
+
+  useEffect(() => {
+    setLocalSearchQuery(searchQuery);
+  }, [searchQuery]);
 
   const handleBrandSelect = (brandId: string) => {
     setSelectedBrand(brandId);
   };
 
-  const filteredProducts = selectedBrand 
-    ? allProducts.filter(product => product.brand.toLowerCase().replace("'", "").replace("'", "") === selectedBrand.toLowerCase().replace("'", "").replace("'", ""))
-    : allProducts;
+  const activeSearchQuery = localSearchQuery.toLowerCase().trim();
+
+  const filteredProducts = allProducts.filter(product => {
+    const matchesBrand = !selectedBrand || 
+      product.brand.toLowerCase().replace("'", "").replace("'", "") === selectedBrand.toLowerCase().replace("'", "").replace("'", "");
+    
+    const matchesSearch = !activeSearchQuery || 
+      product.name.toLowerCase().includes(activeSearchQuery) ||
+      product.brand.toLowerCase().includes(activeSearchQuery) ||
+      (product.description && product.description.toLowerCase().includes(activeSearchQuery));
+    
+    return matchesBrand && matchesSearch;
+  });
 
   const handleAddToCart = (productId: string, size?: string, color?: string) => {
     const product = allProducts.find(p => p.id === productId);
@@ -993,11 +1013,51 @@ export default function Clothing() {
     <>
       <div className="min-h-screen bg-gradient-surface">
         <div className="container mx-auto px-6 py-8">
-          <BrandSection
-            title="Clothing Stores"
-            brands={clothingBrands}
-            onBrandSelect={handleBrandSelect}
-          />
+          {/* Search Bar */}
+          <div className="mb-8">
+            <div className="relative max-w-2xl mx-auto">
+              <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+              <Input
+                type="text"
+                placeholder="Search clothing items, brands..."
+                value={localSearchQuery}
+                onChange={(e) => setLocalSearchQuery(e.target.value)}
+                className="pl-12 py-6 text-lg"
+              />
+            </div>
+          </div>
+
+          {/* Search Results or Brand List */}
+          {activeSearchQuery ? (
+            <div>
+              <h2 className="text-2xl font-bold text-foreground mb-6">
+                Search Results for "{localSearchQuery}"
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      {...product}
+                      onAddToCart={handleAddToCart}
+                      onReserveForTrial={handleReserveForTrial}
+                      onViewDetails={() => setSelectedProduct(product.id)}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-12">
+                    <p className="text-muted-foreground text-lg">No products found matching your search.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <BrandSection
+              title="Clothing Stores"
+              brands={clothingBrands}
+              onBrandSelect={handleBrandSelect}
+            />
+          )}
         </div>
       </div>
       
