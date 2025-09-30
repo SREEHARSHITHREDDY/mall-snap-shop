@@ -335,6 +335,38 @@ export default function Other() {
 
   const activeSearchQuery = (localSearchQuery || searchQuery).toLowerCase().trim();
 
+  // Helper function to match similar terms
+  const matchesSimilarTerms = (text: string, searchQuery: string): boolean => {
+    const lowerText = text.toLowerCase();
+    const lowerQuery = searchQuery.toLowerCase();
+    
+    // Direct match
+    if (lowerText.includes(lowerQuery)) return true;
+    
+    // Similar word matching
+    const similarWords: { [key: string]: string[] } = {
+      'bag': ['backpack', 'organizer', 'collection'],
+      'backpack': ['bag'],
+      'phone': ['iphone', 'smartphone', 'mobile'],
+      'laptop': ['computer', 'macbook', 'notebook'],
+      'headphone': ['earphone', 'airpod', 'earbud'],
+      'book': ['magazine', 'novel', 'fiction'],
+      'camping': ['tent', 'outdoor', 'hiking'],
+      'toy': ['plush', 'doll']
+    };
+    
+    // Check if search query matches any similar words
+    for (const [key, synonyms] of Object.entries(similarWords)) {
+      if (lowerQuery.includes(key)) {
+        if (synonyms.some(syn => lowerText.includes(syn))) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  };
+
   const filteredProducts = sampleProducts.filter(product => {
     const matchesBrand = !selectedBrand || (() => {
       const brand = otherBrands.find(b => b.id === selectedBrand);
@@ -342,8 +374,8 @@ export default function Other() {
     })();
     
     const matchesSearch = !activeSearchQuery || 
-      product.name.toLowerCase().includes(activeSearchQuery) ||
-      product.brand.toLowerCase().includes(activeSearchQuery);
+      matchesSimilarTerms(product.name, activeSearchQuery) ||
+      matchesSimilarTerms(product.brand, activeSearchQuery);
     
     return matchesBrand && matchesSearch;
   });

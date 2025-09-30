@@ -1025,14 +1025,46 @@ export default function Clothing() {
 
   const activeSearchQuery = localSearchQuery.toLowerCase().trim();
 
+  // Helper function to match similar terms
+  const matchesSimilarTerms = (text: string, searchQuery: string): boolean => {
+    const lowerText = text.toLowerCase();
+    const lowerQuery = searchQuery.toLowerCase();
+    
+    // Direct match
+    if (lowerText.includes(lowerQuery)) return true;
+    
+    // Similar word matching
+    const similarWords: { [key: string]: string[] } = {
+      'bag': ['backpack', 'tote', 'duffel', 'crossbody', 'shoulder'],
+      'backpack': ['bag', 'rucksack'],
+      'shoe': ['sneaker', 'trainer', 'footwear'],
+      'sneaker': ['shoe', 'trainer'],
+      'jacket': ['coat', 'blazer', 'hoodie'],
+      'pant': ['trouser', 'jean', 'jogger', 'legging'],
+      'jean': ['denim', 'pant'],
+      'shirt': ['tee', 'top', 'blouse']
+    };
+    
+    // Check if search query matches any similar words
+    for (const [key, synonyms] of Object.entries(similarWords)) {
+      if (lowerQuery.includes(key)) {
+        if (synonyms.some(syn => lowerText.includes(syn))) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  };
+
   const filteredProducts = allProducts.filter(product => {
     const matchesBrand = !selectedBrand || 
       product.brand.toLowerCase().replace("'", "").replace("'", "") === selectedBrand.toLowerCase().replace("'", "").replace("'", "");
     
     const matchesSearch = !activeSearchQuery || 
-      product.name.toLowerCase().includes(activeSearchQuery) ||
-      product.brand.toLowerCase().includes(activeSearchQuery) ||
-      (product.description && product.description.toLowerCase().includes(activeSearchQuery));
+      matchesSimilarTerms(product.name, activeSearchQuery) ||
+      matchesSimilarTerms(product.brand, activeSearchQuery) ||
+      (product.description && matchesSimilarTerms(product.description, activeSearchQuery));
     
     return matchesBrand && matchesSearch;
   });

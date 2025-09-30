@@ -43,8 +43,8 @@ const foodBrands = [
     logo: "/api/placeholder/64/64",
     description: "Fresh sandwiches and healthy options",
     category: "food", 
-    isOpen: false,
-    productCount: 29
+    isOpen: true,
+    productCount: 6
   }
 ];
 
@@ -208,6 +208,86 @@ const allFoodItems = [
     category: "food" as const,
     prepTime: "2 mins",
     description: "Freshly baked muffin with real blueberries"
+  },
+
+  // Subway Products
+  {
+    id: "subway-1",
+    name: "Italian B.M.T. Sub",
+    price: 249,
+    image: "/api/placeholder/300/300",
+    brand: "Subway",
+    rating: 4.4,
+    inStock: true,
+    stockCount: 20,
+    category: "food" as const,
+    prepTime: "8-10 mins",
+    description: "Ham, salami, and pepperoni with veggies on fresh bread"
+  },
+  {
+    id: "subway-2",
+    name: "Chicken Teriyaki Sub",
+    price: 269,
+    image: "/api/placeholder/300/300",
+    brand: "Subway",
+    rating: 4.5,
+    inStock: true,
+    stockCount: 18,
+    category: "food" as const,
+    prepTime: "8-10 mins",
+    description: "Tender chicken strips with teriyaki glaze and fresh vegetables"
+  },
+  {
+    id: "subway-3",
+    name: "Veggie Delite Sub",
+    price: 199,
+    image: "/api/placeholder/300/300",
+    brand: "Subway",
+    rating: 4.2,
+    inStock: true,
+    stockCount: 25,
+    category: "food" as const,
+    prepTime: "5-8 mins",
+    description: "Fresh vegetables with your choice of sauces on wheat bread"
+  },
+  {
+    id: "subway-4",
+    name: "Tuna Sub",
+    price: 239,
+    image: "/api/placeholder/300/300",
+    brand: "Subway",
+    rating: 4.3,
+    inStock: true,
+    stockCount: 15,
+    category: "food" as const,
+    prepTime: "8-10 mins",
+    description: "Tuna mixed with mayo, topped with fresh vegetables"
+  },
+  {
+    id: "subway-5",
+    name: "Meatball Marinara Sub",
+    price: 259,
+    image: "/api/placeholder/300/300",
+    brand: "Subway",
+    rating: 4.6,
+    inStock: true,
+    stockCount: 12,
+    category: "food" as const,
+    prepTime: "10-12 mins",
+    description: "Italian meatballs in marinara sauce with melted cheese"
+  },
+  {
+    id: "subway-6",
+    name: "Turkey Breast Sub",
+    price: 249,
+    image: "/api/placeholder/300/300",
+    brand: "Subway",
+    rating: 4.4,
+    inStock: true,
+    stockCount: 22,
+    category: "food" as const,
+    prepTime: "8-10 mins",
+    description: "Lean turkey breast with fresh veggies and your choice of sauce"
   }
 ];
 
