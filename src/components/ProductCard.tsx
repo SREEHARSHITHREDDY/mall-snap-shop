@@ -100,11 +100,11 @@ export function ProductCard({
 
       <CardFooter className="p-4 pt-0 flex flex-col gap-2">
         {category === "clothing" ? (
-          <div className="flex gap-2 w-full">
+          <div className="grid grid-cols-2 gap-2 w-full">
             <Button 
               variant="outline" 
               size="sm" 
-              className="flex-1"
+              className="w-full text-xs sm:text-sm"
               onClick={handleReserveTrial}
               disabled={!inStock}
             >
@@ -112,12 +112,12 @@ export function ProductCard({
             </Button>
             <Button 
               size="sm" 
-              className="flex-1 bg-gradient-primary hover:opacity-90"
+              className="w-full bg-gradient-primary hover:opacity-90 text-xs sm:text-sm"
               onClick={handleAddToCart}
               disabled={!inStock}
             >
               <ShoppingCartIcon className="w-4 h-4 mr-1" />
-              Buy Now
+              Buy
             </Button>
           </div>
         ) : (
