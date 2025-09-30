@@ -427,23 +427,6 @@ const allProducts = [
 
   // Adidas Products
   {
-    id: "adidas-1",
-    name: "Classic White Sneakers",
-    price: 3999,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Adidas",
-    rating: 4.7,
-    inStock: true,
-    stockCount: 15,
-    category: "clothing" as const,
-    sizes: ["6", "7", "8", "9", "10", "11"],
-    colors: ["White", "Black", "Grey"],
-    fitStyle: "Regular",
-    description: "Classic white sneakers with superior comfort and style.",
-    material: "Leather Upper, Rubber Sole"
-  },
-  {
     id: "adidas-2",
     name: "3-Stripes Track Pants",
     price: 2799,
@@ -476,23 +459,6 @@ const allProducts = [
     fitStyle: "Compression Fit",
     description: "High-performance sports bra with moisture-wicking technology.",
     material: "78% Recycled Polyester, 22% Elastane"
-  },
-  {
-    id: "adidas-4",
-    name: "Ultraboost 22 Running Shoes",
-    price: 8999,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Adidas",
-    rating: 4.8,
-    inStock: true,
-    stockCount: 12,
-    category: "clothing" as const,
-    sizes: ["6", "7", "8", "9", "10", "11", "12"],
-    colors: ["Black", "White", "Blue", "Red"],
-    fitStyle: "Athletic Fit",
-    description: "Premium running shoes with Boost cushioning technology.",
-    material: "Primeknit Upper, Boost Midsole"
   },
   {
     id: "adidas-5",
@@ -529,23 +495,6 @@ const allProducts = [
     material: "100% Recycled Polyester"
   },
   {
-    id: "adidas-7",
-    name: "Stan Smith Sneakers",
-    price: 5999,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Adidas",
-    rating: 4.6,
-    inStock: true,
-    stockCount: 9,
-    category: "clothing" as const,
-    sizes: ["6", "7", "8", "9", "10", "11"],
-    colors: ["White/Green", "White/Blue", "All White"],
-    fitStyle: "Regular",
-    description: "Iconic Stan Smith sneakers with minimalist design.",
-    material: "Leather Upper, Rubber Sole"
-  },
-  {
     id: "adidas-8",
     name: "Tiro 21 Training Jacket",
     price: 3799,
@@ -564,23 +513,6 @@ const allProducts = [
   },
 
   // Nike Products
-  {
-    id: "nike-1",
-    name: "Air Force 1 Sneakers",
-    price: 7999,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Nike",
-    rating: 4.8,
-    inStock: true,
-    stockCount: 11,
-    category: "clothing" as const,
-    sizes: ["6", "7", "8", "9", "10", "11", "12"],
-    colors: ["White", "Black", "Red"],
-    fitStyle: "Regular",
-    description: "Iconic Air Force 1 sneakers with classic basketball heritage.",
-    material: "Leather Upper, Rubber Sole"
-  },
   {
     id: "nike-2",
     name: "Dri-FIT Training Top",
@@ -648,23 +580,6 @@ const allProducts = [
     fitStyle: "Compression Fit",
     description: "High-performance compression leggings for training and workouts.",
     material: "Dri-FIT Stretch Fabric"
-  },
-  {
-    id: "nike-6",
-    name: "Revolution 6 Running Shoes",
-    price: 4999,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Nike",
-    rating: 4.3,
-    inStock: true,
-    stockCount: 12,
-    category: "clothing" as const,
-    sizes: ["6", "7", "8", "9", "10", "11"],
-    colors: ["Black/White", "Grey", "Navy"],
-    fitStyle: "Regular",
-    description: "Comfortable running shoes with cushioned midsole.",
-    material: "Mesh Upper, Foam Midsole"
   },
   {
     id: "nike-7",
@@ -839,109 +754,6 @@ const allProducts = [
     material: "60% Cotton, 40% Polyester"
   },
 
-  // Bags & Accessories - Zara
-  {
-    id: "zara-bag-1",
-    name: "Leather Crossbody Bag",
-    price: 2999,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Zara",
-    rating: 4.5,
-    inStock: true,
-    stockCount: 8,
-    category: "clothing" as const,
-    sizes: ["One Size"],
-    colors: ["Black", "Brown", "Beige"],
-    fitStyle: "Adjustable Strap",
-    description: "Elegant leather crossbody bag with adjustable strap and multiple compartments.",
-    material: "100% Genuine Leather"
-  },
-  {
-    id: "zara-bag-2",
-    name: "Canvas Tote Bag",
-    price: 1499,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Zara",
-    rating: 4.3,
-    inStock: true,
-    stockCount: 15,
-    category: "clothing" as const,
-    sizes: ["One Size"],
-    colors: ["Natural", "Black", "Navy"],
-    fitStyle: "Tote Style",
-    description: "Spacious canvas tote bag perfect for everyday use and shopping.",
-    material: "100% Cotton Canvas"
-  },
-  {
-    id: "hm-bag-1",
-    name: "Structured Shoulder Bag",
-    price: 1999,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "H&M",
-    rating: 4.4,
-    inStock: true,
-    stockCount: 10,
-    category: "clothing" as const,
-    sizes: ["One Size"],
-    colors: ["Black", "White", "Red"],
-    fitStyle: "Shoulder Strap",
-    description: "Chic structured shoulder bag with metallic hardware.",
-    material: "Synthetic Leather"
-  },
-  {
-    id: "nike-bag-1",
-    name: "Sport Backpack",
-    price: 2499,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Nike",
-    rating: 4.6,
-    inStock: true,
-    stockCount: 12,
-    category: "clothing" as const,
-    sizes: ["One Size"],
-    colors: ["Black", "Navy", "Grey"],
-    fitStyle: "Backpack",
-    description: "Durable sport backpack with padded laptop compartment and water bottle holder.",
-    material: "100% Polyester"
-  },
-  {
-    id: "adidas-bag-1",
-    name: "Classic Backpack",
-    price: 2299,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Adidas",
-    rating: 4.5,
-    inStock: true,
-    stockCount: 14,
-    category: "clothing" as const,
-    sizes: ["One Size"],
-    colors: ["Black", "Navy", "Grey"],
-    fitStyle: "Backpack",
-    description: "Classic Adidas backpack with three stripes design and multiple pockets.",
-    material: "100% Recycled Polyester"
-  },
-  {
-    id: "adidas-bag-2",
-    name: "Gym Duffel Bag",
-    price: 3499,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
-    brand: "Adidas",
-    rating: 4.7,
-    inStock: true,
-    stockCount: 6,
-    category: "clothing" as const,
-    sizes: ["Medium", "Large"],
-    colors: ["Black", "Navy", "Red"],
-    fitStyle: "Duffel",
-    description: "Spacious gym duffel bag with shoe compartment and adjustable shoulder strap.",
-    material: "Water-Resistant Polyester"
-  }
 ];
 
 // Calculate actual product counts for each brand

@@ -10,6 +10,33 @@ import { useCart } from "@/context/CartContext";
 
 const otherBrands = [
   {
+    id: "nike",
+    name: "Nike",
+    logo: "/api/placeholder/64/64",
+    description: "Athletic footwear and sneakers",
+    category: "footwear",
+    isOpen: true,
+    productCount: 2
+  },
+  {
+    id: "adidas",
+    name: "Adidas",
+    logo: "/api/placeholder/64/64",
+    description: "Sports shoes and accessories",
+    category: "footwear",
+    isOpen: true,
+    productCount: 3
+  },
+  {
+    id: "bags",
+    name: "Fashion Accessories",
+    logo: "/api/placeholder/64/64",
+    description: "Bags, backpacks, and accessories",
+    category: "accessories",
+    isOpen: true,
+    productCount: 5
+  },
+  {
     id: "sony",
     name: "Sony",
     logo: "/api/placeholder/64/64",
@@ -66,6 +93,122 @@ const otherBrands = [
 ];
 
 const sampleProducts = [
+  // Nike Sneakers
+  {
+    id: "nike-sneaker-1",
+    name: "Air Force 1 Sneakers",
+    price: 7999,
+    image: "/api/placeholder/300/300",
+    brand: "Nike",
+    rating: 4.8,
+    inStock: true,
+    stockCount: 11,
+    category: "other" as const
+  },
+  {
+    id: "nike-sneaker-2",
+    name: "Revolution 6 Running Shoes",
+    price: 4999,
+    image: "/api/placeholder/300/300",
+    brand: "Nike",
+    rating: 4.3,
+    inStock: true,
+    stockCount: 12,
+    category: "other" as const
+  },
+
+  // Adidas Sneakers
+  {
+    id: "adidas-sneaker-1",
+    name: "Classic White Sneakers",
+    price: 3999,
+    image: "/api/placeholder/300/300",
+    brand: "Adidas",
+    rating: 4.7,
+    inStock: true,
+    stockCount: 15,
+    category: "other" as const
+  },
+  {
+    id: "adidas-sneaker-2",
+    name: "Ultraboost 22 Running Shoes",
+    price: 8999,
+    image: "/api/placeholder/300/300",
+    brand: "Adidas",
+    rating: 4.8,
+    inStock: true,
+    stockCount: 12,
+    category: "other" as const
+  },
+  {
+    id: "adidas-sneaker-3",
+    name: "Stan Smith Sneakers",
+    price: 5999,
+    image: "/api/placeholder/300/300",
+    brand: "Adidas",
+    rating: 4.6,
+    inStock: true,
+    stockCount: 9,
+    category: "other" as const
+  },
+
+  // Bags & Backpacks
+  {
+    id: "nike-bag-1",
+    name: "Sport Backpack",
+    price: 2499,
+    image: "/api/placeholder/300/300",
+    brand: "Nike Store",
+    rating: 4.6,
+    inStock: true,
+    stockCount: 12,
+    category: "other" as const
+  },
+  {
+    id: "adidas-bag-1",
+    name: "Classic Backpack",
+    price: 2299,
+    image: "/api/placeholder/300/300",
+    brand: "Adidas Store",
+    rating: 4.5,
+    inStock: true,
+    stockCount: 14,
+    category: "other" as const
+  },
+  {
+    id: "adidas-bag-2",
+    name: "Gym Duffel Bag",
+    price: 3499,
+    image: "/api/placeholder/300/300",
+    brand: "Adidas Store",
+    rating: 4.7,
+    inStock: true,
+    stockCount: 6,
+    category: "other" as const
+  },
+  {
+    id: "fashion-bag-1",
+    name: "Leather Crossbody Bag",
+    price: 2999,
+    image: "/api/placeholder/300/300",
+    brand: "Fashion Accessories",
+    rating: 4.5,
+    inStock: true,
+    stockCount: 8,
+    category: "other" as const
+  },
+  {
+    id: "fashion-bag-2",
+    name: "Canvas Tote Bag",
+    price: 1499,
+    image: "/api/placeholder/300/300",
+    brand: "Fashion Accessories",
+    rating: 4.3,
+    inStock: true,
+    stockCount: 15,
+    category: "other" as const
+  },
+
   // Sony Electronics
   {
     id: "sony-1",

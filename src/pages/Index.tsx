@@ -127,6 +127,8 @@ const Index = () => {
       
       // Define category keywords
       const foodKeywords = ['food', 'burger', 'pizza', 'chicken', 'fries', 'sandwich', 'coffee', 'meal', 'mcdonalds', 'kfc', 'starbucks', 'subway'];
+      const shoesKeywords = ['shoe', 'sneaker', 'footwear', 'nike', 'adidas', 'running', 'air force', 'ultraboost', 'stan smith'];
+      const bagsKeywords = ['bag', 'backpack', 'tote', 'crossbody', 'duffel', 'luggage'];
       const techKeywords = ['phone', 'iphone', 'ipad', 'macbook', 'laptop', 'computer', 'headphone', 'airpods', 'watch', 'playstation', 'ps5', 'console', 'electronic'];
       const bookKeywords = ['book', 'novel', 'magazine', 'notebook', 'stationery', 'reading'];
       const sportsKeywords = ['sports', 'bike', 'yoga', 'camping', 'tent', 'hiking', 'gym', 'fitness'];
@@ -135,6 +137,18 @@ const Index = () => {
       // Check for food items
       if (foodKeywords.some(keyword => query.includes(keyword))) {
         navigate(`/food`);
+        return;
+      }
+      
+      // Check for shoes/sneakers
+      if (shoesKeywords.some(keyword => query.includes(keyword))) {
+        navigate(`/other`);
+        return;
+      }
+      
+      // Check for bags
+      if (bagsKeywords.some(keyword => query.includes(keyword))) {
+        navigate(`/other`);
         return;
       }
       
