@@ -169,7 +169,7 @@ const Index = () => {
               
               <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 Welcome to{" "}
-                <span className="bg-gradient-primary bg-clip-text text-transparent shimmer font-black">
+                <span className="bg-gradient-primary bg-clip-text text-transparent font-black">
                   Shopping Matrix
                 </span>
               </h1>
