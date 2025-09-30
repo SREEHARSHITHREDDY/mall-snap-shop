@@ -26,23 +26,23 @@ const App = () => (
         <OrderProvider>
           <CartProvider>
             <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <MainLayout>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/clothing" element={<Clothing />} />
-                <Route path="/food" element={<Food />} />
-                <Route path="/other" element={<Other />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/qr-codes" element={<QRCodes />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </MainLayout>
-          </BrowserRouter>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/clothing" element={<Clothing />} />
+                    <Route path="/food" element={<Food />} />
+                    <Route path="/other" element={<Other />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/qr-codes" element={<QRCodes />} />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </MainLayout>
+              </BrowserRouter>
             </TooltipProvider>
           </CartProvider>
         </OrderProvider>
