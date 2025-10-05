@@ -216,7 +216,7 @@ const Index = () => {
         <div className="relative container mx-auto px-6 py-24 lg:py-32 z-10">
           <div className="max-w-4xl animate-fade-in-up">
             <div className="glass glass-hover rounded-3xl p-8 mb-8 max-w-2xl backdrop-blur-xl border-white/20">
-              <Badge className="mb-6 bg-white/10 text-white border-white/20 backdrop-blur-sm font-medium">
+              <Badge className="mb-6 bg-gradient-primary text-white border-transparent backdrop-blur-sm font-medium shadow-glow">
                 <MapPinIcon className="w-4 h-4 mr-2" />
                 Shop Smart, Shop Easy
               </Badge>
