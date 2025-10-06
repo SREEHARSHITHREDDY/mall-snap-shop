@@ -22,42 +22,59 @@ serve(async (req) => {
       });
     }
 
-    const openaiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openaiKey) {
-      console.error("❌ OPENAI_API_KEY not configured");
-      return new Response(JSON.stringify({ error: "OpenAI API key not configured" }), {
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableApiKey) {
+      console.error("❌ LOVABLE_API_KEY not configured");
+      return new Response(JSON.stringify({ error: "Lovable AI key not configured" }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
-    console.log(`🤖 AI Query Request: ${prompt.substring(0, 50)}...`);
+    console.log(`🤖 AI Query Request (Lovable AI): ${prompt.substring(0, 50)}...`);
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { 
             role: 'system', 
-            content: 'You are a helpful shopping assistant for Shopping Matrix. Provide product recommendations, answer questions about products, and help users make informed purchasing decisions.' 
+            content: 'You are a helpful shopping assistant for Shopping Matrix. Provide product recommendations, answer questions about products, and help users make informed purchasing decisions. Keep responses brief and helpful.' 
           },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.7,
-        max_tokens: 500,
       }),
     });
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error(`❌ OpenAI API Error: ${response.status} - ${errorData}`);
+      console.error(`❌ Lovable AI Error: ${response.status} - ${errorData}`);
+      
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ 
+          error: 'Rate limit exceeded. Please try again in a moment.'
+        }), {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ 
+          error: 'AI credits exhausted. Please add credits to your Lovable workspace.'
+        }), {
+          status: 402,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
       return new Response(JSON.stringify({ 
-        error: 'OpenAI API request failed',
+        error: 'AI request failed',
         details: errorData 
       }), {
         status: response.status,
@@ -68,11 +85,11 @@ serve(async (req) => {
     const data = await response.json();
     const aiResponse = data.choices[0].message.content;
 
-    console.log(`✅ AI Query Response Generated (${aiResponse.length} chars)`);
+    console.log(`✅ AI Response Generated (${aiResponse.length} chars) - Model: Gemini 2.5 Flash`);
 
     return new Response(JSON.stringify({ 
       response: aiResponse,
-      model: 'gpt-3.5-turbo'
+      model: 'google/gemini-2.5-flash'
     }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
