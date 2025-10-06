@@ -7,8 +7,7 @@ import {
   ShoppingCartIcon,
   QrCodeIcon,
   ClockIcon,
-  HomeIcon,
-  DatabaseIcon
+  HomeIcon
 } from "lucide-react";
 import {
   Sidebar,
@@ -33,10 +32,6 @@ const quickActions = [
   { title: "My Cart", url: "/cart", icon: ShoppingCartIcon },
   { title: "My Orders", url: "/orders", icon: ClockIcon },
   { title: "QR Codes", url: "/qr-codes", icon: QrCodeIcon },
-];
-
-const devTools = [
-  { title: "MongoDB Demo", url: "/mongodb-demo", icon: DatabaseIcon },
 ];
 
 export function AppSidebar() {
@@ -102,29 +97,6 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {quickActions.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
-                      className={`${getNavCls({ isActive: isActive(item.url) })} rounded-lg px-3 py-2 flex items-center gap-3`}
-                    >
-                      <item.icon className="w-5 h-5" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup className="px-4 py-4">
-          <SidebarGroupLabel className="text-muted-foreground font-medium mb-2">
-            {!collapsed && "Developer Tools"}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
-              {devTools.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
