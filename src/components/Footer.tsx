@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { ShoppingBagIcon, MailIcon, PhoneIcon, MapPinIcon } from "lucide-react";
-
 export function Footer() {
-  return (
-    <footer className="bg-gradient-to-br from-background via-shopping-surface to-background border-t border-border/50 mt-auto">
+  return <footer className="bg-gradient-to-br from-background via-shopping-surface to-background border-t border-border/50 mt-auto">
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
@@ -83,7 +81,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <PhoneIcon className="w-4 h-4 text-shopping-primary" />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 9398939257</span>
               </li>
               <li className="flex items-center gap-2">
                 <MailIcon className="w-4 h-4 text-shopping-primary" />
@@ -113,6 +111,5 @@ export function Footer() {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 }
