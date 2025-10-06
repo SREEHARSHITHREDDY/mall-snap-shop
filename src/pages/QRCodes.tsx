@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { QrCodeIcon, DownloadIcon, ShareIcon, RefreshCcwIcon } from "lucide-react";
 import { useOrders, Order } from "@/context/OrderContext";
+import { QRCodeSVG } from "qrcode.react";
 
 const getStatusColor = (status: Order['status'] | 'used' | 'expired') => {
   switch (status) {
@@ -42,8 +43,14 @@ export default function QRCodes() {
   const completedOrders = getCompletedOrders();
 
   const downloadQR = (order: Order) => {
-    console.log("Downloading QR code:", order.qrCode);
-    // In a real app, this would generate and download the QR code image
+    const canvas = document.getElementById(`qr-${order.id}`) as HTMLCanvasElement;
+    if (canvas) {
+      const url = canvas.toDataURL("image/png");
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `QR-Order-${order.id}.png`;
+      link.click();
+    }
   };
 
   const shareQR = (order: Order) => {
@@ -96,10 +103,16 @@ export default function QRCodes() {
                   </CardHeader>
                   <CardContent className="space-y-4 pt-4">
                     <div 
-                      className="w-48 h-48 mx-auto bg-white rounded-lg flex items-center justify-center border cursor-pointer hover:shadow-md transition-smooth"
+                      className="w-48 h-48 mx-auto bg-white rounded-lg flex items-center justify-center border cursor-pointer hover:shadow-md transition-smooth p-4"
                       onClick={() => setSelectedQR(order)}
                     >
-                      <QrCodeIcon className="w-36 h-36 text-gray-300" />
+                      <QRCodeSVG
+                        id={`qr-${order.id}`}
+                        value={`ORDER-${order.id}-${order.qrCode}`}
+                        size={160}
+                        level="H"
+                        includeMargin={true}
+                      />
                     </div>
                     
                     <div className="space-y-2 pt-2">
@@ -174,8 +187,13 @@ export default function QRCodes() {
                     </p>
                   </CardHeader>
                   <CardContent className="space-y-4 pt-4">
-                    <div className="w-48 h-48 mx-auto bg-gray-100 rounded-lg flex items-center justify-center border">
-                      <QrCodeIcon className="w-36 h-36 text-gray-200" />
+                    <div className="w-48 h-48 mx-auto bg-gray-100 rounded-lg flex items-center justify-center border p-4 opacity-50">
+                      <QRCodeSVG
+                        value={`ORDER-${order.id}-${order.qrCode}-USED`}
+                        size={160}
+                        level="H"
+                        includeMargin={true}
+                      />
                     </div>
                     
                     <div className="space-y-2 pt-2">
@@ -200,8 +218,14 @@ export default function QRCodes() {
                 <p className="text-sm text-muted-foreground">Show this QR code to collect your order</p>
               </CardHeader>
               <CardContent className="text-center space-y-4">
-                <div className="w-48 h-48 mx-auto bg-white rounded-lg flex items-center justify-center border">
-                  <QrCodeIcon className="w-32 h-32 text-gray-300" />
+                <div className="w-64 h-64 mx-auto bg-white rounded-lg flex items-center justify-center border p-6">
+                  <QRCodeSVG
+                    id={`qr-modal-${selectedQR.id}`}
+                    value={`ORDER-${selectedQR.id}-${selectedQR.qrCode}`}
+                    size={220}
+                    level="H"
+                    includeMargin={true}
+                  />
                 </div>
                 <div className="space-y-2">
                   <p className="font-bold">QR Code: {selectedQR.qrCode}</p>
