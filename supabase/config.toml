@@ -1,7 +1,4 @@
 project_id = "yeenpjafsekhonbgsond"
 
-[functions.mongoHandler]
-verify_jwt = false
-
 [functions.ai-query]
 verify_jwt = false

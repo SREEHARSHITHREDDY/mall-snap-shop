@@ -17,7 +17,7 @@ import Other from "./pages/Other";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import QRCodes from "./pages/QRCodes";
-import MongoDBDemo from "./pages/MongoDBDemo";
+import SupabaseDemo from "./pages/SupabaseDemo";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,7 +49,7 @@ const App = () => {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/qr-codes" element={<QRCodes />} />
-                    <Route path="/mongodb-demo" element={<MongoDBDemo />} />
+                    <Route path="/database" element={<SupabaseDemo />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

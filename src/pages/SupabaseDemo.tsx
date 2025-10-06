@@ -14,7 +14,7 @@ import {
 } from "@/lib/supabaseService";
 import { Database, Package, ShoppingCart, Sparkles, RefreshCw, CheckCircle2 } from "lucide-react";
 
-export default function MongoDBDemo() {
+export default function SupabaseDemo() {
   const [products, setProducts] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [aiPrompt, setAiPrompt] = useState("");
@@ -100,13 +100,10 @@ export default function MongoDBDemo() {
       }
 
       setIsLoadingAI(true);
-      console.log("🤖 Querying AI...");
-      
       const result = await queryAI(aiPrompt);
       setAiResponse(result.response);
       
       toast.success("✅ AI response received!");
-      console.log("✅ AI query successful");
     } catch (error: any) {
       console.error("❌ AI query failed:", error);
       toast.error("AI query failed: " + error.message);
@@ -251,9 +248,8 @@ export default function MongoDBDemo() {
                 <CardTitle>Orders Collection</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  Orders are created automatically when users add items to cart and checkout.
-                  Go to the Cart page to test order creation.
+                <p className="text-muted-foreground mb-4">
+                  Orders are created automatically when users complete checkout.
                 </p>
               </CardContent>
             </Card>

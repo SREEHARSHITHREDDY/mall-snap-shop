@@ -7,7 +7,8 @@ import {
   ShoppingCartIcon,
   QrCodeIcon,
   ClockIcon,
-  HomeIcon
+  HomeIcon,
+  DatabaseIcon
 } from "lucide-react";
 import {
   Sidebar,
@@ -32,6 +33,7 @@ const quickActions = [
   { title: "My Cart", url: "/cart", icon: ShoppingCartIcon },
   { title: "My Orders", url: "/orders", icon: ClockIcon },
   { title: "QR Codes", url: "/qr-codes", icon: QrCodeIcon },
+  { title: "Database", url: "/database", icon: DatabaseIcon },
 ];
 
 export function AppSidebar() {
