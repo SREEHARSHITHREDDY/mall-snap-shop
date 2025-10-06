@@ -74,10 +74,11 @@ export default function QRCodes() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {activeOrders.map((order) => (
                 <Card key={order.id} className="bg-gradient-card hover:shadow-elevated transition-smooth">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">Order #{order.id}</CardTitle>
-                      <div className="flex gap-2">
+                  <CardHeader className="space-y-2">
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-bold">Order</h3>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xl font-bold">#{order.id}</span>
                         <Badge variant={getStatusColor(order.status)}>
                           {order.status.toUpperCase()}
                         </Badge>
@@ -93,43 +94,43 @@ export default function QRCodes() {
                       Valid until order pickup
                     </p>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 pt-4">
                     <div 
-                      className="w-32 h-32 mx-auto bg-white rounded-lg flex items-center justify-center border cursor-pointer hover:shadow-md transition-smooth"
+                      className="w-48 h-48 mx-auto bg-white rounded-lg flex items-center justify-center border cursor-pointer hover:shadow-md transition-smooth"
                       onClick={() => setSelectedQR(order)}
                     >
-                      <QrCodeIcon className="w-24 h-24 text-gray-300" />
+                      <QrCodeIcon className="w-36 h-36 text-gray-300" />
                     </div>
                     
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium">Items:</p>
+                    <div className="space-y-2 pt-2">
+                      <p className="text-base font-semibold">Items:</p>
                       {order.items.map((item, index) => (
-                        <p key={index} className="text-xs text-muted-foreground">• {item.quantity}x {item.name}</p>
+                        <p key={index} className="text-sm text-muted-foreground">• {item.quantity}x {item.name}</p>
                       ))}
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 pt-2">
                       <Button
                         variant="outline"
-                        size="sm"
+                        size="default"
                         onClick={() => downloadQR(order)}
                         className="flex-1"
                       >
-                        <DownloadIcon className="w-4 h-4 mr-1" />
+                        <DownloadIcon className="w-4 h-4 mr-2" />
                         Download
                       </Button>
                       <Button
                         variant="outline" 
-                        size="sm"
+                        size="default"
                         onClick={() => shareQR(order)}
                         className="flex-1"
                       >
-                        <ShareIcon className="w-4 h-4 mr-1" />
+                        <ShareIcon className="w-4 h-4 mr-2" />
                         Share
                       </Button>
                       <Button
                         variant="outline"
-                        size="sm"
+                        size="icon"
                         onClick={() => refreshQR(order)}
                       >
                         <RefreshCcwIcon className="w-4 h-4" />
@@ -155,10 +156,11 @@ export default function QRCodes() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {completedOrders.map((order) => (
                 <Card key={order.id} className="bg-gradient-card opacity-75">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">Order #{order.id}</CardTitle>
-                      <div className="flex gap-2">
+                  <CardHeader className="space-y-2">
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-bold">Order</h3>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xl font-bold">#{order.id}</span>
                         <Badge variant={getStatusColor("used")}>
                           USED
                         </Badge>
@@ -171,15 +173,15 @@ export default function QRCodes() {
                       Created: {new Date(order.orderTime).toLocaleString()}
                     </p>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="w-32 h-32 mx-auto bg-gray-100 rounded-lg flex items-center justify-center border">
-                      <QrCodeIcon className="w-24 h-24 text-gray-200" />
+                  <CardContent className="space-y-4 pt-4">
+                    <div className="w-48 h-48 mx-auto bg-gray-100 rounded-lg flex items-center justify-center border">
+                      <QrCodeIcon className="w-36 h-36 text-gray-200" />
                     </div>
                     
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium">Items:</p>
+                    <div className="space-y-2 pt-2">
+                      <p className="text-base font-semibold">Items:</p>
                       {order.items.map((item, index) => (
-                        <p key={index} className="text-xs text-muted-foreground">• {item.quantity}x {item.name}</p>
+                        <p key={index} className="text-sm text-muted-foreground">• {item.quantity}x {item.name}</p>
                       ))}
                     </div>
                   </CardContent>
