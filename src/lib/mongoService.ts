@@ -108,3 +108,83 @@ export async function queryAI(
   
   return res.json();
 }
+
+// ========== ORDER OPERATIONS ==========
+
+/**
+ * Get all orders
+ */
+export async function getOrders(limit: number = 20): Promise<MongoDocument[]> {
+  return getCollection("orders", limit);
+}
+
+/**
+ * Add a new order
+ */
+export async function addOrder(
+  orderData: {
+    userId?: string;
+    items: Array<{ productId: string; name: string; price: number; quantity: number }>;
+    totalAmount: number;
+    status: "pending" | "completed" | "cancelled";
+  }
+): Promise<{ success: boolean; insertedId: string }> {
+  return addDocument("orders", {
+    ...orderData,
+    createdAt: new Date(),
+  });
+}
+
+/**
+ * Update an order
+ */
+export async function updateOrder(
+  orderId: string,
+  updates: Partial<MongoDocument>
+): Promise<{ success: boolean; modifiedCount: number }> {
+  return updateDocument("orders", orderId, {
+    ...updates,
+    updatedAt: new Date(),
+  });
+}
+
+/**
+ * Delete an order
+ */
+export async function deleteOrder(
+  orderId: string
+): Promise<{ success: boolean; deletedCount: number }> {
+  return deleteDocument("orders", orderId);
+}
+
+// ========== PRODUCT OPERATIONS ==========
+
+/**
+ * Get all products
+ */
+export async function getProducts(limit: number = 20): Promise<MongoDocument[]> {
+  return getCollection("products", limit);
+}
+
+/**
+ * Update product stock
+ */
+export async function updateProductStock(
+  productId: string,
+  stockChange: number
+): Promise<{ success: boolean; modifiedCount: number }> {
+  // First get the current product to calculate new stock
+  const products = await getProducts(100);
+  const product = products.find((p) => p._id === productId);
+  
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  
+  const newStock = (product.stock || 0) + stockChange;
+  
+  return updateDocument("products", productId, {
+    stock: Math.max(0, newStock),
+    updatedAt: new Date(),
+  });
+}
