@@ -6,9 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const MONGODB_URI = Deno.env.get("MONGODB_URI");
+const MONGODB_URI = Deno.env.get("MONGODB_ATLAS_KEY");
 if (!MONGODB_URI) {
-  throw new Error("MONGODB_URI environment variable is not set");
+  throw new Error("MONGODB_ATLAS_KEY environment variable is not set");
 }
 
 const client = new MongoClient(MONGODB_URI);
