@@ -1,3 +1,4 @@
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
@@ -18,7 +19,13 @@ import Orders from "./pages/Orders";
 import QRCodes from "./pages/QRCodes";
 import MongoDBDemo from "./pages/MongoDBDemo";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => {
   console.log('Shopping Matrix App Initialized');
