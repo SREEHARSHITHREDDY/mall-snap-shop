@@ -16,6 +16,7 @@ import Other from "./pages/Other";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import QRCodes from "./pages/QRCodes";
+import MongoDBDemo from "./pages/MongoDBDemo";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/qr-codes" element={<QRCodes />} />
+                    <Route path="/mongodb-demo" element={<MongoDBDemo />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

@@ -167,6 +167,50 @@ export async function getProducts(limit: number = 20): Promise<MongoDocument[]> 
 }
 
 /**
+ * Add a new product
+ */
+export async function addProduct(
+  productData: {
+    name: string;
+    price: number;
+    category: string;
+    stock: number;
+    description?: string;
+    image?: string;
+  }
+): Promise<{ success: boolean; insertedId: string }> {
+  console.log("➕ Adding new product to MongoDB...");
+  return addDocument("products", {
+    ...productData,
+    createdAt: new Date(),
+  });
+}
+
+/**
+ * Update a product
+ */
+export async function updateProduct(
+  productId: string,
+  updates: Partial<MongoDocument>
+): Promise<{ success: boolean; modifiedCount: number }> {
+  console.log(`✏️ Updating product ${productId}...`);
+  return updateDocument("products", productId, {
+    ...updates,
+    updatedAt: new Date(),
+  });
+}
+
+/**
+ * Delete a product
+ */
+export async function deleteProduct(
+  productId: string
+): Promise<{ success: boolean; deletedCount: number }> {
+  console.log(`🗑️ Deleting product ${productId}...`);
+  return deleteDocument("products", productId);
+}
+
+/**
  * Update product stock
  */
 export async function updateProductStock(
@@ -187,4 +231,54 @@ export async function updateProductStock(
     stock: Math.max(0, newStock),
     updatedAt: new Date(),
   });
+}
+
+// ========== USER OPERATIONS ==========
+
+/**
+ * Get all users
+ */
+export async function getUsers(limit: number = 20): Promise<MongoDocument[]> {
+  return getCollection("users", limit);
+}
+
+/**
+ * Add a new user
+ */
+export async function addUser(
+  userData: {
+    name: string;
+    email: string;
+    password: string;
+  }
+): Promise<{ success: boolean; insertedId: string }> {
+  console.log("➕ Adding new user to MongoDB...");
+  return addDocument("users", {
+    ...userData,
+    createdAt: new Date(),
+  });
+}
+
+/**
+ * Update a user
+ */
+export async function updateUser(
+  userId: string,
+  updates: Partial<MongoDocument>
+): Promise<{ success: boolean; modifiedCount: number }> {
+  console.log(`✏️ Updating user ${userId}...`);
+  return updateDocument("users", userId, {
+    ...updates,
+    updatedAt: new Date(),
+  });
+}
+
+/**
+ * Delete a user
+ */
+export async function deleteUser(
+  userId: string
+): Promise<{ success: boolean; deletedCount: number }> {
+  console.log(`🗑️ Deleting user ${userId}...`);
+  return deleteDocument("users", userId);
 }
