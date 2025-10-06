@@ -8,6 +8,9 @@ import { ArrowLeftIcon, ClockIcon, MapPinIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
 import { useStock } from "@/context/StockContext";
+import bigMacImage from "@/assets/products/mcdonalds-bigmac.jpg";
+import zingerImage from "@/assets/products/kfc-zinger.jpg";
+import caramelImage from "@/assets/products/starbucks-caramel.jpg";
 
 const foodBrands = [
   {
@@ -54,7 +57,7 @@ const allFoodItems = [
     id: "mcdonalds-1",
     name: "Big Mac Combo",
     price: 299,
-    image: "/api/placeholder/300/300",
+    image: bigMacImage,
     brand: "McDonald's",
     rating: 4.3,
     inStock: true,
@@ -108,7 +111,7 @@ const allFoodItems = [
     id: "kfc-1",
     name: "Zinger Burger Meal",
     price: 349,
-    image: "/api/placeholder/300/300",
+    image: zingerImage,
     brand: "KFC",
     rating: 4.5,
     inStock: true,
@@ -161,7 +164,7 @@ const allFoodItems = [
     id: "starbucks-1",
     name: "Caramel Macchiato",
     price: 195,
-    image: "/api/placeholder/300/300",
+    image: caramelImage,
     brand: "Starbucks",
     rating: 4.6,
     inStock: true,

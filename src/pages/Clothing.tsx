@@ -8,6 +8,9 @@ import { ArrowLeftIcon, SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
+import zaraTshirt from "@/assets/products/zara-tshirt.jpg";
+import zaraSweater from "@/assets/products/zara-sweater.jpg";
+import zaraJeans from "@/assets/products/zara-jeans.jpg";
 
 
 const allProducts = [
@@ -16,8 +19,8 @@ const allProducts = [
     id: "zara-1",
     name: "Premium Cotton T-Shirt",
     price: 1299,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    image: zaraTshirt,
+    images: [zaraTshirt, zaraTshirt, zaraTshirt],
     brand: "Zara",
     rating: 4.5,
     inStock: true,
@@ -33,8 +36,8 @@ const allProducts = [
     id: "zara-2",
     name: "Textured Knit Sweater",
     price: 2899,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    image: zaraSweater,
+    images: [zaraSweater, zaraSweater, zaraSweater],
     brand: "Zara",
     rating: 4.3,
     inStock: true,
@@ -50,8 +53,8 @@ const allProducts = [
     id: "zara-3",
     name: "High Waist Wide Leg Jeans",
     price: 3299,
-    image: "/api/placeholder/300/300",
-    images: ["/api/placeholder/300/300", "/api/placeholder/300/300", "/api/placeholder/300/300"],
+    image: zaraJeans,
+    images: [zaraJeans, zaraJeans, zaraJeans],
     brand: "Zara",
     rating: 4.6,
     inStock: true,

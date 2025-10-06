@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -17,6 +18,7 @@ export function MainLayout({ children }: MainLayoutProps) {
           <main className="flex-1">
             {children}
           </main>
+          <Footer />
         </div>
       </div>
     </SidebarProvider>
