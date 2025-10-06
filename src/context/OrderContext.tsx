@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { addOrder as addOrderToSupabase } from '@/lib/supabaseService';
 
 export interface OrderItem {
   id: string;
@@ -29,7 +30,7 @@ export interface Order {
 
 interface OrderContextType {
   orders: Order[];
-  addOrder: (orderData: Omit<Order, 'id' | 'orderTime' | 'qrCode'>) => void;
+  addOrder: (orderData: Omit<Order, 'id' | 'orderTime' | 'qrCode'>) => Promise<void>;
   updateOrderStatus: (orderId: string, status: Order['status']) => void;
   getActiveOrders: () => Order[];
   getCompletedOrders: () => Order[];
@@ -88,7 +89,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const addOrder = (orderData: Omit<Order, 'id' | 'orderTime' | 'qrCode'>) => {
+  const addOrder = async (orderData: Omit<Order, 'id' | 'orderTime' | 'qrCode'>) => {
     const newOrder: Order = {
       ...orderData,
       id: generateOrderId(),
@@ -96,6 +97,20 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       qrCode: generateQRCode(),
       estimatedTime: calculateEstimatedTime(orderData.items)
     };
+
+    // Save to Supabase
+    try {
+      await addOrderToSupabase({
+        order_number: newOrder.id,
+        items: newOrder.items,
+        total: newOrder.total,
+        status: newOrder.status,
+        qr_code: newOrder.qrCode,
+        estimated_time: parseInt(newOrder.estimatedTime?.replace(':', '') || '0')
+      });
+    } catch (error) {
+      console.error('Failed to save order to Supabase:', error);
+    }
 
     setOrders(prev => [newOrder, ...prev]);
   };

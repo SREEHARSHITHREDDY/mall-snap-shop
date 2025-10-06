@@ -1,74 +1,69 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import MongoCollectionTable from "@/components/MongoCollectionTable";
 import {
-  addUser,
   addProduct,
-  getUsers,
   getProducts,
   getOrders,
   queryAI,
-} from "@/lib/mongoService";
-import { Database, Users, Package, ShoppingCart, Sparkles, RefreshCw } from "lucide-react";
+} from "@/lib/supabaseService";
+import { Database, Package, ShoppingCart, Sparkles, RefreshCw, CheckCircle2 } from "lucide-react";
 
 export default function MongoDBDemo() {
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [products, setProducts] = useState<any[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [aiPrompt, setAiPrompt] = useState("");
   const [aiResponse, setAiResponse] = useState("");
   const [isLoadingAI, setIsLoadingAI] = useState(false);
-
-  // User form state
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking');
 
   // Product form state
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productCategory, setProductCategory] = useState("");
   const [productStock, setProductStock] = useState("");
+  const [productBrand, setProductBrand] = useState("");
 
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-    toast.success("Data refreshed!");
+  useEffect(() => {
+    checkConnection();
+    loadData();
+  }, []);
+
+  const checkConnection = async () => {
+    try {
+      await getProducts();
+      setConnectionStatus('connected');
+    } catch (error) {
+      setConnectionStatus('error');
+    }
   };
 
-  const handleAddUser = async () => {
+  const loadData = async () => {
     try {
-      if (!userName || !userEmail || !userPassword) {
-        toast.error("Please fill all user fields");
-        return;
-      }
-
-      await addUser({
-        name: userName,
-        email: userEmail,
-        password: userPassword,
-      });
-
-      toast.success("✅ User added to MongoDB!");
-      console.log("✅ User added successfully");
-      
-      // Clear form
-      setUserName("");
-      setUserEmail("");
-      setUserPassword("");
-      
-      handleRefresh();
-    } catch (error: any) {
-      console.error("❌ Failed to add user:", error);
-      toast.error("Failed to add user: " + error.message);
+      const [productsData, ordersData] = await Promise.all([
+        getProducts(),
+        getOrders()
+      ]);
+      setProducts(productsData);
+      setOrders(ordersData);
+    } catch (error) {
+      console.error('Failed to load data:', error);
     }
+  };
+
+  const handleRefresh = async () => {
+    await loadData();
+    toast.success("Data refreshed!");
   };
 
   const handleAddProduct = async () => {
     try {
-      if (!productName || !productPrice || !productCategory || !productStock) {
+      if (!productName || !productPrice || !productCategory || !productStock || !productBrand) {
         toast.error("Please fill all product fields");
         return;
       }
@@ -77,19 +72,20 @@ export default function MongoDBDemo() {
         name: productName,
         price: parseFloat(productPrice),
         category: productCategory,
-        stock: parseInt(productStock),
+        stock_count: parseInt(productStock),
+        brand: productBrand,
       });
 
-      toast.success("✅ Product added to MongoDB!");
-      console.log("✅ Product added successfully");
+      toast.success("✅ Product added to Supabase!");
       
       // Clear form
       setProductName("");
       setProductPrice("");
       setProductCategory("");
       setProductStock("");
+      setProductBrand("");
       
-      handleRefresh();
+      await handleRefresh();
     } catch (error: any) {
       console.error("❌ Failed to add product:", error);
       toast.error("Failed to add product: " + error.message);
@@ -127,11 +123,17 @@ export default function MongoDBDemo() {
           <div>
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
               <Database className="w-8 h-8" />
-              MongoDB Atlas Integration Demo
+              Supabase Database Demo
             </h1>
             <p className="text-muted-foreground mt-2">
-              Test all MongoDB Atlas + OpenAI operations
+              Connected to Lovable Cloud (Supabase)
             </p>
+            {connectionStatus === 'connected' && (
+              <Badge className="mt-2 bg-green-500">
+                <CheckCircle2 className="w-3 h-3 mr-1" />
+                Connection Successful
+              </Badge>
+            )}
           </div>
           <Button onClick={handleRefresh} size="lg">
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -139,12 +141,8 @@ export default function MongoDBDemo() {
           </Button>
         </div>
 
-        <Tabs defaultValue="users" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="users" className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              Users
-            </TabsTrigger>
+        <Tabs defaultValue="products" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="products" className="flex items-center gap-2">
               <Package className="w-4 h-4" />
               Products
@@ -159,60 +157,6 @@ export default function MongoDBDemo() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Users Tab */}
-          <TabsContent value="users" className="space-y-6">
-            <Card className="bg-gradient-card">
-              <CardHeader>
-                <CardTitle>Add New User</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="userName">Name</Label>
-                    <Input
-                      id="userName"
-                      placeholder="John Doe"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="userEmail">Email</Label>
-                    <Input
-                      id="userEmail"
-                      type="email"
-                      placeholder="john@example.com"
-                      value={userEmail}
-                      onChange={(e) => setUserEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="userPassword">Password</Label>
-                    <Input
-                      id="userPassword"
-                      type="password"
-                      placeholder="••••••••"
-                      value={userPassword}
-                      onChange={(e) => setUserPassword(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <Button onClick={handleAddUser} className="w-full">
-                  Add User to MongoDB
-                </Button>
-              </CardContent>
-            </Card>
-
-            <MongoCollectionTable
-              collectionName="users"
-              fields={[
-                { name: "name", label: "Name", type: "text" },
-                { name: "email", label: "Email", type: "email" },
-                { name: "password", label: "Password", type: "password" },
-              ]}
-            />
-          </TabsContent>
-
           {/* Products Tab */}
           <TabsContent value="products" className="space-y-6">
             <Card className="bg-gradient-card">
@@ -220,7 +164,7 @@ export default function MongoDBDemo() {
                 <CardTitle>Add New Product</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="productName">Name</Label>
                     <Input
@@ -250,6 +194,15 @@ export default function MongoDBDemo() {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="productBrand">Brand</Label>
+                    <Input
+                      id="productBrand"
+                      placeholder="Zara"
+                      value={productBrand}
+                      onChange={(e) => setProductBrand(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="productStock">Stock</Label>
                     <Input
                       id="productStock"
@@ -261,20 +214,34 @@ export default function MongoDBDemo() {
                   </div>
                 </div>
                 <Button onClick={handleAddProduct} className="w-full">
-                  Add Product to MongoDB
+                  Add Product to Supabase
                 </Button>
               </CardContent>
             </Card>
 
-            <MongoCollectionTable
-              collectionName="products"
-              fields={[
-                { name: "name", label: "Name", type: "text" },
-                { name: "price", label: "Price", type: "number" },
-                { name: "category", label: "Category", type: "text" },
-                { name: "stock", label: "Stock", type: "number" },
-              ]}
-            />
+            <Card className="bg-gradient-card">
+              <CardHeader>
+                <CardTitle>Products in Database</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {products.map((product) => (
+                    <div key={product.id} className="flex justify-between items-center p-3 bg-muted rounded">
+                      <div>
+                        <p className="font-medium">{product.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {product.brand} • {product.category} • ${product.price}
+                        </p>
+                      </div>
+                      <Badge>{product.stock_count} in stock</Badge>
+                    </div>
+                  ))}
+                  {products.length === 0 && (
+                    <p className="text-muted-foreground text-center py-4">No products yet</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Orders Tab */}
@@ -291,13 +258,31 @@ export default function MongoDBDemo() {
               </CardContent>
             </Card>
 
-            <MongoCollectionTable
-              collectionName="orders"
-              fields={[
-                { name: "status", label: "Status", type: "text" },
-                { name: "totalAmount", label: "Total Amount", type: "number" },
-              ]}
-            />
+            <Card className="bg-gradient-card">
+              <CardHeader>
+                <CardTitle>Orders in Database</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {orders.map((order) => (
+                    <div key={order.id} className="flex justify-between items-center p-3 bg-muted rounded">
+                      <div>
+                        <p className="font-medium">{order.order_number}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {order.items?.length || 0} items • ${order.total}
+                        </p>
+                      </div>
+                      <Badge variant={order.status === 'delivered' ? 'default' : 'secondary'}>
+                        {order.status}
+                      </Badge>
+                    </div>
+                  ))}
+                  {orders.length === 0 && (
+                    <p className="text-muted-foreground text-center py-4">No orders yet</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* AI Query Tab */}
@@ -306,7 +291,7 @@ export default function MongoDBDemo() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-primary" />
-                  Test AI Integration (OpenAI GPT-3.5-turbo)
+                  Test AI Integration (Lovable AI)
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -345,8 +330,8 @@ export default function MongoDBDemo() {
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <span>MongoDB Handler Edge Function: Active</span>
+              <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'}`} />
+              <span>Supabase Database: {connectionStatus === 'connected' ? 'Connected' : 'Error'}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
@@ -354,11 +339,11 @@ export default function MongoDBDemo() {
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <span>Cart + Checkout: MongoDB Integrated</span>
+              <span>Products Table: {products.length} items</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <span>QR Codes: Scannable QR Generation Active</span>
+              <span>Orders Table: {orders.length} orders</span>
             </div>
           </CardContent>
         </Card>
