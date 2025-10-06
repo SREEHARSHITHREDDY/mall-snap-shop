@@ -86,3 +86,25 @@ export async function deleteDocument(
   if (!res.ok) throw new Error(`Failed to delete document from ${collection}`);
   return res.json();
 }
+
+/**
+ * Query AI for product recommendations and assistance
+ */
+export async function queryAI(
+  prompt: string
+): Promise<{ response: string; model: string }> {
+  const AI_URL = `https://${PROJECT_ID}.supabase.co/functions/v1/ai-query`;
+  
+  const res = await fetch(AI_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt }),
+  });
+  
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || `Failed to query AI`);
+  }
+  
+  return res.json();
+}
