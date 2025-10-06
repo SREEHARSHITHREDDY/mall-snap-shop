@@ -7,7 +7,8 @@ import { TrashIcon, MinusIcon, PlusIcon, ShoppingCartIcon, ClockIcon, CreditCard
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { useCart } from "@/context/CartContext";
-import { addOrder, updateOrder, deleteOrder, updateProductStock, queryAI } from "@/lib/mongoService";
+import { updateProductStock, queryAI } from "@/lib/supabaseService";
+import { useOrders } from "@/context/OrderContext";
 
 interface CartItem {
   id: string;
@@ -61,12 +62,12 @@ const sampleCartItems: CartItem[] = [
 
 export default function Cart() {
   const { cartItems, updateQuantity: updateCartQuantity, removeFromCart, clearCart } = useCart();
+  const { addOrder } = useOrders();
   const [showPayment, setShowPayment] = useState(false);
   const [paymentProduct, setPaymentProduct] = useState<any>(null);
   const [aiRecommendations, setAiRecommendations] = useState<string>("");
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [pendingOrders, setPendingOrders] = useState<Map<string, string>>(new Map());
 
   // Fetch AI recommendations when cart changes
   useEffect(() => {
@@ -94,82 +95,17 @@ export default function Cart() {
     }
   };
 
-  const updateQuantity = async (id: string, newQuantity: number) => {
-    try {
-      updateCartQuantity(id, newQuantity);
-      
-      // Update the order in MongoDB if it exists
-      const orderId = pendingOrders.get(id);
-      if (orderId) {
-        const item = cartItems.find(i => i.id === id);
-        if (item) {
-          await updateOrder(orderId, {
-            items: [{
-              productId: item.id,
-              name: item.name,
-              price: item.price,
-              quantity: newQuantity,
-            }],
-            totalAmount: item.price * newQuantity,
-          });
-          console.log("✅ Order quantity updated in MongoDB");
-        }
-      }
-    } catch (error) {
-      console.error("❌ Failed to update quantity:", error);
-    }
-  };
-
-  const removeItem = async (id: string) => {
-    try {
-      console.log("🗑️ Removing product from cart...");
-      
-      // Delete the order from MongoDB
-      const orderId = pendingOrders.get(id);
-      if (orderId) {
-        await deleteOrder(orderId);
-        setPendingOrders(prev => {
-          const newMap = new Map(prev);
-          newMap.delete(id);
-          return newMap;
-        });
-        console.log("✅ Order deleted from MongoDB");
-      }
-      
+  const updateQuantity = (id: string, newQuantity: number) => {
+    if (newQuantity === 0) {
       removeFromCart(id);
-      toast.success("Item removed from cart");
-    } catch (error) {
-      console.error("❌ Failed to remove from cart:", error);
-      toast.error("Failed to remove item. Please try again.");
+    } else {
+      updateCartQuantity(id, newQuantity);
     }
   };
 
-  const handleAddItemToMongoDB = async (item: CartItem) => {
-    try {
-      console.log("📦 Creating pending order in MongoDB...");
-      
-      const orderData = {
-        items: [{
-          productId: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-        }],
-        totalAmount: item.price * item.quantity,
-        status: "pending" as const,
-      };
-      
-      const result = await addOrder(orderData);
-      
-      // Store the MongoDB order ID for this cart item
-      setPendingOrders(prev => new Map(prev).set(item.id, result.insertedId));
-      
-      console.log("✅ Pending order created - Order ID:", result.insertedId);
-      toast.success(`${item.name} added to cart`);
-    } catch (error) {
-      console.error("❌ Failed to create pending order:", error);
-      toast.error("Failed to add item to cart. Please try again.");
-    }
+  const removeItem = (id: string) => {
+    removeFromCart(id);
+    toast.success("Item removed from cart");
   };
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -184,24 +120,27 @@ export default function Cart() {
   const handleCompleteCheckout = async () => {
     try {
       setIsCheckingOut(true);
-      console.log("💳 Processing checkout...");
       
-      // Create pending orders for any items not yet in MongoDB
-      for (const item of cartItems) {
-        if (!pendingOrders.has(item.id)) {
-          await handleAddItemToMongoDB(item);
-        }
-      }
+      // Determine the category and payment method based on cart contents
+      const hasClothing = clothingPurchaseItems.length > 0 || clothingTrialItems.length > 0;
+      const hasFood = foodItems.length > 0;
+      const hasOther = otherItems.length > 0;
       
-      // Update all pending orders to completed
-      const updatePromises = Array.from(pendingOrders.entries()).map(([itemId, orderId]) => 
-        updateOrder(orderId, { status: "completed" })
-      );
+      let category: "clothing" | "food" | "other" = "other";
+      if (hasClothing) category = "clothing";
+      else if (hasFood) category = "food";
       
-      await Promise.all(updatePromises);
-      console.log("✅ All orders marked as completed");
+      // Create order via OrderContext
+      await addOrder({
+        items: cartItems,
+        total: total,
+        status: "preparing",
+        category: category,
+        paymentMethod: "card",
+        orderType: foodItems.length > 0 && foodItems[0].orderType ? foodItems[0].orderType : undefined
+      });
       
-      // Optionally reduce product stock
+      // Update product stock
       const stockUpdatePromises = cartItems.map(item => 
         updateProductStock(item.id, -item.quantity).catch(err => {
           console.warn(`⚠️ Could not update stock for ${item.name}:`, err);
@@ -209,16 +148,14 @@ export default function Cart() {
       );
       
       await Promise.all(stockUpdatePromises);
-      console.log("✅ Product stock updated");
       
       // Clear cart
       clearCart();
-      setPendingOrders(new Map());
       
-      toast.success("Order completed! 🎉 Your order has been successfully placed.");
+      toast.success("Order completed! 🎉 Check your orders page.");
     } catch (error) {
       console.error("❌ Checkout failed:", error);
-      toast.error("Checkout failed. Something went wrong. Please try again.");
+      toast.error("Checkout failed. Please try again.");
     } finally {
       setIsCheckingOut(false);
     }
